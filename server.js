@@ -1,19 +1,40 @@
 const express = require("express");
 const path = require("path");
-const PORT = process.env.PORT || 3001;
+const mongoose = require("mongoose");
+
+const config = require("config");
+
+// Express Instance
 const app = express();
+
+// Variable Port
+const PORT = process.env.PORT || 3001;
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
+// API Routes
+
 // Send every request to the React app
 // Define any API routes before this runs
-app.get("*", function(req, res) {
+app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-app.listen(PORT, function() {
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI || config.get("MONGODB_URI"), {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
+
+app.listen(PORT, function () {
   console.log(`🌎 ==> API server now on port ${PORT}!`);
 });
