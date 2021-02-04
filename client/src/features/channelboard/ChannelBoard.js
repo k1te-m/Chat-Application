@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, LOGOUT, authSlice } from "../auth/authSlice";
-import LogoutButton from "../logout/LogoutButton";
+import Logo from "../Logo";
 
 const ChannelBoard = (props) => {
   const auth = useSelector(selectAuth);
@@ -10,8 +10,19 @@ const ChannelBoard = (props) => {
 
   return (
     <div className="container">
-      <p>Hello {auth.user.name}!</p>
-      <button onClick={() => dispatch(LOGOUT())}>Logout</button>
+      <div className="row">
+        <div className="col-6">
+          <Logo />
+          <p>Hello {auth.user.name}!</p>
+        </div>
+        <div className="col-6">
+          <button>Create Channel</button>
+          <button onClick={() => dispatch(LOGOUT())}>Logout</button>
+        </div>
+      </div>
+      <div className="row">
+        <h1>Available Channels</h1>
+      </div>
     </div>
   );
 };
