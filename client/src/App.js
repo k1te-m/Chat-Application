@@ -4,13 +4,15 @@ import logo from "./logo.svg";
 import { Counter } from "./features/counter/Counter";
 import Landing from "./features/landing/Landing";
 import "./App.css";
+import SignUp from "./features/signup/SignUp";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Switch>
-          <Route path="/" component={Landing} />
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/signup" component={SignUp} />
         </Switch>
       </Router>
       {/* <header className="App-header">
