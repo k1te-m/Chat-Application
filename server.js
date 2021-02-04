@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-
+const routes = require("./routes");
 const config = require("config");
 
 // Express Instance
@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // API Routes
+app.use(routes);
 
 // Send every request to the React app
 // Define any API routes before this runs

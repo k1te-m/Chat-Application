@@ -5,6 +5,7 @@ import { Counter } from "./features/counter/Counter";
 import Landing from "./features/landing/Landing";
 import "./App.css";
 import SignUp from "./features/signup/SignUp";
+import Login from "./features/login/Login";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/login" component={Login} />
         </Switch>
       </Router>
       {/* <header className="App-header">

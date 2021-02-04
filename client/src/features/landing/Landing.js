@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../Logo";
+import { useSelector, useDispatch } from "react-redux";
+import { selectAuth, loadUser } from "../auth/authSlice";
+import ChannelBoard from "../channelboard/ChannelBoard";
 
 const LandingWrapper = styled.div`
   display: flex;
@@ -32,28 +35,39 @@ const SignUpBtn = styled.button`
 `;
 
 const Landing = () => {
-  return (
-    <>
-      <LandingWrapper className="wrapper">
-        <div className="container">
-          <Logo />
-          <HeaderRow className="row">
-            <h1>Welcome!</h1>
-          </HeaderRow>
-          <SignUpRow className="row">
-            <Link to="/signup">
-              <SignUpBtn>Sign up</SignUpBtn>
-            </Link>
-          </SignUpRow>
-          <LoginRow className="row">
-            <Link to="/login">
-              <LoginBtn>Log in</LoginBtn>
-            </Link>
-          </LoginRow>
-        </div>
-      </LandingWrapper>
-    </>
-  );
+  const auth = useSelector(selectAuth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
+
+  if (auth.user === null) {
+    return (
+      <>
+        <LandingWrapper className="wrapper">
+          <div className="container">
+            <Logo />
+            <HeaderRow className="row">
+              <h1>Welcome!</h1>
+            </HeaderRow>
+            <SignUpRow className="row">
+              <Link to="/signup">
+                <SignUpBtn>Sign up</SignUpBtn>
+              </Link>
+            </SignUpRow>
+            <LoginRow className="row">
+              <Link to="/login">
+                <LoginBtn>Log in</LoginBtn>
+              </Link>
+            </LoginRow>
+          </div>
+        </LandingWrapper>
+      </>
+    );
+  } else {
+    return <ChannelBoard />;
+  }
 };
 
 export default Landing;
