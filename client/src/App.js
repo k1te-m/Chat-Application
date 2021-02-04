@@ -1,12 +1,21 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import logo from "./logo.svg";
 import { Counter } from "./features/counter/Counter";
+import Landing from "./features/landing/Landing";
 import "./App.css";
+import SignUp from "./features/signup/SignUp";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/signup" component={SignUp} />
+        </Switch>
+      </Router>
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
         <p>
@@ -50,7 +59,7 @@ function App() {
             React Redux
           </a>
         </span>
-      </header>
+      </header> */}
     </div>
   );
 }
