@@ -4,7 +4,7 @@ import setAuthToken from "../../utils/setAuthToken";
 
 const initialState = {
   token: localStorage.getItem("token"),
-  isAuthenticated: localStorage.getItem("token") ? true : false,
+  isAuthenticated: false,
   isLoading: false,
   user: null,
   error: null,
@@ -82,7 +82,6 @@ export const authSlice = createSlice({
       state.isLoading = true;
     },
     [loginUser.fulfilled]: (state, action) => {
-      loadUser();
       localStorage.setItem("token", action.payload.token);
       state.isLoading = false;
       state.isAuthenticated = true;
