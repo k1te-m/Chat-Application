@@ -2,6 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
+const auth = require("../../middleware/auth");
 
 const User = require("../../models/user");
 
@@ -12,6 +13,19 @@ if (process.env.NODE_ENV !== "production") {
 } else {
   jwtENV = process.env.JWT_SECRET;
 }
+
+// @route     GET api/auth/user
+// @desc      Get user data
+// @access    Private
+router.get("/user", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) throw Error("User does not exist");
+    res.json(user);
+  } catch (err) {
+    res.status(500).send("Server Error");
+  }
+});
 
 // @route POST api/auth/register
 // @desc Register user
@@ -86,6 +100,7 @@ router.post("/login", async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
+        username: user.username,
         email: user.email,
       },
     });
