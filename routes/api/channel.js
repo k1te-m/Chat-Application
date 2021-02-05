@@ -4,8 +4,8 @@ const auth = require("../../middleware/auth");
 
 // @route  GET api/channel
 // @desc   Get all channels
-// @access Privates
-router.get("/", auth, channelController.getChannels);
+// @access Public
+router.get("/", channelController.getChannels);
 
 // @route  POST api/channel
 // @desc   Create a channel
