@@ -11,6 +11,7 @@ import {
   selectChannel,
   loadChannels,
   createChannel,
+  selectAllChannels,
 } from "../channelboard/channels/channelSlice";
 import Modal from "../modal/Modal";
 import API from "../../utils/API";
@@ -20,7 +21,9 @@ const ChannelBoard = (props) => {
   const auth = useSelector(selectAuth);
   const modal = useSelector(selectModal);
   const channel = useSelector(selectChannel);
+  const allChannels = useSelector(selectAllChannels);
   const dispatch = useDispatch();
+  console.log(allChannels);
 
   useEffect(() => {
     dispatch(loadChannels());
@@ -47,6 +50,7 @@ const ChannelBoard = (props) => {
       alert("Please enter all available fields.");
     } else {
       dispatch(createChannel({ name, description, createdBy }));
+      dispatch(TOGGLE_MODAL());
     }
   };
 
@@ -67,6 +71,12 @@ const ChannelBoard = (props) => {
         </div>
         <div className="row">
           <h1>Available Channels</h1>
+          {allChannels.map((channel) => (
+            <div>
+              <h1>{channel.name}</h1>
+              <span>{channel.description}</span>
+            </div>
+          ))}
         </div>
       </div>
       <Modal isOpen={modal} handleClose={() => dispatch(TOGGLE_MODAL())}>
@@ -75,6 +85,7 @@ const ChannelBoard = (props) => {
             <div className="form-group">
               <label>Channel Name</label>
               <input
+                value={name}
                 onChange={handleInputChange}
                 className="form-control"
                 name="name"
@@ -83,6 +94,7 @@ const ChannelBoard = (props) => {
               />
               <label>Description</label>
               <input
+                value={description}
                 onChange={handleInputChange}
                 className="form-control"
                 name="description"
