@@ -51,7 +51,7 @@ const channelSlice = createSlice({
     },
     [createChannel.fulfilled]: (state, action) => {
       state.newChannel.isPending = false;
-      state.allChannels.channels.push();
+      state.allChannels.channels.push(action.payload);
     },
     [createChannel.rejected]: (state) => {
       state.allChannels.isLoading = false;
@@ -61,5 +61,6 @@ const channelSlice = createSlice({
 
 // Selector
 export const selectChannel = (state) => state.channel;
+export const selectAllChannels = (state) => state.channel.allChannels.channels;
 
 export default channelSlice.reducer;
