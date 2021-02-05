@@ -7,4 +7,7 @@ export default {
   getChannels: async () => {
     return await axios.get("/api/channel");
   },
+  getChannelByID: async (id) => {
+    return await axios.get("/api/channel/find/" + id);
+  },
 };
