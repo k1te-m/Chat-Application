@@ -12,4 +12,9 @@ router.get("/", channelController.getChannels);
 // @access Private
 router.post("/", auth, channelController.saveChannel);
 
+// @route  GET api/channel/find/:_id
+// @desc   Get specific channel by ID
+// @access Public
+router.get("/find/:_id", channelController.getChannelById);
+
 module.exports = router;

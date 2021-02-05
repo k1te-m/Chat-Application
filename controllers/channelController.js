@@ -15,4 +15,10 @@ module.exports = {
       })
       .catch((error) => res.status(422).json(error));
   },
+  getChannelById: (req, res) => {
+    const id = req.params._id;
+    Channel.findOne({ _id: id })
+      .then((channel) => res.json(channel))
+      .catch((error) => res.status(422).json(error));
+  },
 };

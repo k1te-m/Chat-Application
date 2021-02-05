@@ -12,13 +12,14 @@ import {
   loadChannels,
   createChannel,
   selectAllChannels,
+  setChannel,
 } from "../channelboard/channels/channelSlice";
 import Modal from "../modal/Modal";
 import API from "../../utils/API";
 import Logo from "../Logo";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const ChannelBoard = (props) => {
+const ChannelBoard = () => {
   const auth = useSelector(selectAuth);
   const modal = useSelector(selectModal);
   const channel = useSelector(selectChannel);
@@ -28,6 +29,8 @@ const ChannelBoard = (props) => {
   useEffect(() => {
     dispatch(loadChannels());
   }, []);
+
+  let history = useHistory();
 
   const [channelObject, setChannelObject] = useState({
     name: "",
@@ -70,10 +73,15 @@ const ChannelBoard = (props) => {
         <div className="row">
           <h1>Available Channels</h1>
           {allChannels.map((channel) => (
-            <div key={channel.name} className="card">
-              <Link to={channel.name}>
+            <div key={channel._id} className="card">
+              <a
+                onClick={() => {
+                  localStorage.setItem("channel", channel._id);
+                  history.push(`/${channel.name}`);
+                }}
+              >
                 <h1>{channel.name}</h1>
-              </Link>
+              </a>
               <span>{channel.description}</span>
             </div>
           ))}

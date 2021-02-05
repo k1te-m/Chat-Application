@@ -6,6 +6,7 @@ import Landing from "./features/landing/Landing";
 import "./App.css";
 import SignUp from "./features/signup/SignUp";
 import Login from "./features/login/Login";
+import Channel from "./features/channelboard/channels/Channel";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route exact path="/" component={Landing} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/login" component={Login} />
+          <Route path="/:channel" component={Channel} />
         </Switch>
       </Router>
       {/* <header className="App-header">
