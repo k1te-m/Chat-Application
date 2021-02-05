@@ -13,6 +13,10 @@ const initialState = {
     isLoading: false,
     channels: [],
   },
+  currentChannel: {
+    isLoading: false,
+    channel: {},
+  },
 };
 
 export const createChannel = createAsyncThunk(
@@ -27,6 +31,14 @@ export const loadChannels = createAsyncThunk(
   "channel/loadChannels",
   async (channel, thunkAPI) => {
     const response = await API.getChannels();
+    return response.data;
+  }
+);
+
+export const setChannel = createAsyncThunk(
+  "channel/setChannel",
+  async (id, thunkAPI) => {
+    const response = await API.getChannelByID(id);
     return response.data;
   }
 );
@@ -56,11 +68,24 @@ const channelSlice = createSlice({
     [createChannel.rejected]: (state) => {
       state.allChannels.isLoading = false;
     },
+    [setChannel.pending]: (state) => {
+      state.currentChannel.isLoading = true;
+    },
+    [setChannel.fulfilled]: (state, action) => {
+      state.currentChannel.isLoading = false;
+      state.currentChannel.channel = action.payload;
+    },
+    [setChannel.rejected]: (state) => {
+      localStorage.removeItem("channel");
+      state.allChannels.isLoading = false;
+    },
   },
 });
 
 // Selector
 export const selectChannel = (state) => state.channel;
 export const selectAllChannels = (state) => state.channel.allChannels.channels;
+export const selectCurrentChannel = (state) =>
+  state.channel.currentChannel.channel;
 
 export default channelSlice.reducer;
