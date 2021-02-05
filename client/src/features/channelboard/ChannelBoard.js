@@ -1,18 +1,112 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAuth, LOGOUT, authSlice } from "../auth/authSlice";
-import LogoutButton from "../logout/LogoutButton";
+import {
+  selectAuth,
+  selectAuthUser,
+  LOGOUT,
+  authSlice,
+} from "../auth/authSlice";
+import { selectModal, TOGGLE_MODAL } from "../modal/modalSlice";
+import {
+  selectChannel,
+  loadChannels,
+  createChannel,
+  selectAllChannels,
+} from "../channelboard/channels/channelSlice";
+import Modal from "../modal/Modal";
+import API from "../../utils/API";
+import Logo from "../Logo";
+import { Link } from "react-router-dom";
 
 const ChannelBoard = (props) => {
   const auth = useSelector(selectAuth);
+  const modal = useSelector(selectModal);
+  const channel = useSelector(selectChannel);
+  const allChannels = useSelector(selectAllChannels);
   const dispatch = useDispatch();
-  console.log(dispatch(LOGOUT));
+
+  useEffect(() => {
+    dispatch(loadChannels());
+  }, []);
+
+  const [channelObject, setChannelObject] = useState({
+    name: "",
+    description: "",
+    createdBy: auth.user._id,
+  });
+
+  const { name, description, createdBy } = channelObject;
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setChannelObject({ ...channelObject, [name]: value });
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    if (name === "" || description === "") {
+      alert("Please enter all available fields.");
+    } else {
+      dispatch(createChannel({ name, description, createdBy }));
+      dispatch(TOGGLE_MODAL());
+    }
+  };
 
   return (
-    <div className="container">
-      <p>Hello {auth.user.name}!</p>
-      <button onClick={() => dispatch(LOGOUT())}>Logout</button>
-    </div>
+    <>
+      <div className="container">
+        <div className="row">
+          <div className="col-6">
+            <Logo />
+            <p>Hello {auth.user.name}!</p>
+          </div>
+          <div className="col-6">
+            <button onClick={() => dispatch(TOGGLE_MODAL())}>
+              Create Channel
+            </button>
+            <button onClick={() => dispatch(LOGOUT())}>Logout</button>
+          </div>
+        </div>
+        <div className="row">
+          <h1>Available Channels</h1>
+          {allChannels.map((channel) => (
+            <div key={channel.name} className="card">
+              <Link to={channel.name}>
+                <h1>{channel.name}</h1>
+              </Link>
+              <span>{channel.description}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <Modal isOpen={modal} handleClose={() => dispatch(TOGGLE_MODAL())}>
+        <div className="container">
+          <form>
+            <div className="form-group">
+              <label>Channel Name</label>
+              <input
+                value={name}
+                onChange={handleInputChange}
+                className="form-control"
+                name="name"
+                placeholder="Lounge"
+                type="text"
+              />
+              <label>Description</label>
+              <input
+                value={description}
+                onChange={handleInputChange}
+                className="form-control"
+                name="description"
+                placeholder="A place to hang for a while!"
+                type="text"
+              />
+            </div>
+            <button onClick={handleFormSubmit}>Create Channel</button>
+          </form>
+        </div>
+      </Modal>
+    </>
   );
 };
 
