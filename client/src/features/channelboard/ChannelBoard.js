@@ -16,6 +16,7 @@ import {
 import Modal from "../modal/Modal";
 import API from "../../utils/API";
 import Logo from "../Logo";
+import { Link } from "react-router-dom";
 
 const ChannelBoard = (props) => {
   const auth = useSelector(selectAuth);
@@ -23,7 +24,6 @@ const ChannelBoard = (props) => {
   const channel = useSelector(selectChannel);
   const allChannels = useSelector(selectAllChannels);
   const dispatch = useDispatch();
-  console.log(allChannels);
 
   useEffect(() => {
     dispatch(loadChannels());
@@ -36,8 +36,6 @@ const ChannelBoard = (props) => {
   });
 
   const { name, description, createdBy } = channelObject;
-
-  console.log(channelObject);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -72,8 +70,10 @@ const ChannelBoard = (props) => {
         <div className="row">
           <h1>Available Channels</h1>
           {allChannels.map((channel) => (
-            <div>
-              <h1>{channel.name}</h1>
+            <div key={channel.name} className="card">
+              <Link to={channel.name}>
+                <h1>{channel.name}</h1>
+              </Link>
               <span>{channel.description}</span>
             </div>
           ))}
