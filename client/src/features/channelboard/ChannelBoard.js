@@ -19,7 +19,7 @@ import API from "../../utils/API";
 import Logo from "../Logo";
 import { useHistory } from "react-router-dom";
 
-const ChannelBoard = (props) => {
+const ChannelBoard = () => {
   const auth = useSelector(selectAuth);
   const modal = useSelector(selectModal);
   const channel = useSelector(selectChannel);
