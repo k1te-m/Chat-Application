@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import API from "../../../utils/API";
 
 const initialState = {
@@ -8,6 +7,7 @@ const initialState = {
     description: "",
     createdBy: "",
     isPending: false,
+    error: null,
   },
   allChannels: {
     isLoading: false,
@@ -67,6 +67,7 @@ const channelSlice = createSlice({
     },
     [createChannel.rejected]: (state) => {
       state.allChannels.isLoading = false;
+      state.newChannel.error = "Channel name already in use.";
     },
     [setChannel.pending]: (state) => {
       state.currentChannel.isLoading = true;
