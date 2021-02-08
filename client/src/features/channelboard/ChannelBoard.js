@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  selectAuth,
-  selectAuthUser,
-  LOGOUT,
-  authSlice,
-} from "../auth/authSlice";
+import { selectAuth, LOGOUT } from "../auth/authSlice";
 import { selectModal, TOGGLE_MODAL } from "../modal/modalSlice";
 import {
   selectChannel,
   loadChannels,
   createChannel,
   selectAllChannels,
-  setChannel,
 } from "../channelboard/channels/channelSlice";
+import { SET_ALERT } from "../../features/alert/alertSlice";
 import Modal from "../modal/Modal";
-import API from "../../utils/API";
 import Logo from "../Logo";
 import { useHistory } from "react-router-dom";
 
@@ -48,10 +42,21 @@ const ChannelBoard = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     if (name === "" || description === "") {
-      alert("Please enter all available fields.");
+      dispatch(
+        SET_ALERT({
+          message: "Please enter all available fields.",
+          type: "danger",
+        })
+      );
     } else {
       dispatch(createChannel({ name, description, createdBy }));
-      dispatch(TOGGLE_MODAL());
+      if (typeof channel.newChannel.error === "string") {
+        dispatch(
+          SET_ALERT({ message: channel.newChannel.error, type: "danger" })
+        );
+      } else {
+        dispatch(TOGGLE_MODAL());
+      }
     }
   };
 
@@ -61,7 +66,7 @@ const ChannelBoard = () => {
         <div className="row">
           <div className="col-6">
             <Logo />
-            <p>Hello {auth.user.name}!</p>
+            <p>Hello {auth.user.username}!</p>
           </div>
           <div className="col-6">
             <button onClick={() => dispatch(TOGGLE_MODAL())}>
