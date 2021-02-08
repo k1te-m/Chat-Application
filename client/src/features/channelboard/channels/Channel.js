@@ -31,7 +31,6 @@ const Channel = () => {
   const dispatch = useDispatch();
 
   let localChannel = localStorage.getItem("channel");
-  console.log(localChannel);
 
   useEffect(() => {
     dispatch(loadUser());
@@ -51,7 +50,7 @@ const Channel = () => {
         <Logo />
         <div className="container">
           <div className="row">
-            <p>Hello {auth.user.name}!</p>
+            <p>Hello {auth.user.username}!</p>
             <span>Current Channel: {channel.name}</span>
           </div>
         </div>
