@@ -33,8 +33,13 @@ export const registerUser = createAsyncThunk(
       { name, username, email, password },
       config
     );
-    loadUser();
-    return response.data;
+
+    if (response.status !== 200) {
+      return response.data;
+    } else {
+      loadUser();
+      return response.data;
+    }
   }
 );
 
@@ -51,6 +56,7 @@ export const loginUser = createAsyncThunk(
       { email, password },
       config
     );
+
     return response.data;
   }
 );
@@ -76,7 +82,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
     },
     [registerUser.rejected]: (state, action) => {
-      state.error = action.payload;
+      state.error = "User already exists.";
     },
     [loginUser.pending]: (state) => {
       state.isLoading = true;
@@ -93,7 +99,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = false;
       state.user = null;
       state.token = null;
-      state.error = action.payload;
+      state.error = "Invalid credentials.";
     },
     [loadUser.pending]: (state) => {
       state.isLoading = true;

@@ -7,11 +7,13 @@ import "./App.css";
 import SignUp from "./features/signup/SignUp";
 import Login from "./features/login/Login";
 import Channel from "./features/channelboard/channels/Channel";
+import Alert from "./features/alert/Alert";
 
 function App() {
   return (
     <div className="App">
       <Router>
+        <Alert />
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route exact path="/signup" component={SignUp} />
