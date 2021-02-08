@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, registerUser, loadUser } from "../auth/authSlice";
+import { SET_ALERT } from "../../features/alert/alertSlice";
 
 const SignUp = (props) => {
   const auth = useSelector(selectAuth);
   const dispatch = useDispatch();
-  console.log(auth);
 
   useEffect(() => {
     if (auth.isAuthenticated) {
       props.history.push("/");
     }
-  }, [auth.isAuthenticated, props.history]);
+  }, [auth.error, auth.isAuthenticated, props.history]);
 
   const [userObject, setUserObject] = useState({
     name: "",
@@ -26,20 +26,34 @@ const SignUp = (props) => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserObject({ ...userObject, [name]: value });
-    console.log(userObject);
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const mailformat = /.+@.+\..+/;
     if (name === "" || email === "" || password === "") {
-      alert("Please enter all available fields.", "danger");
+      dispatch(
+        SET_ALERT({
+          message: "Please enter all available fields.",
+          type: "danger",
+        })
+      );
     } else if (!email.match(mailformat)) {
-      alert("Please enter a valid email address.", "danger");
+      dispatch(
+        SET_ALERT({
+          message: "Please enter a valid email address.",
+          type: "danger",
+        })
+      );
     } else if (password !== password2) {
-      alert("Passwords do not match.", "danger");
+      dispatch(
+        SET_ALERT({ message: "Passwords do not match.", type: "danger" })
+      );
     } else {
       dispatch(registerUser({ name, username, email, password }));
+      if (typeof auth.error === "string") {
+        dispatch(SET_ALERT({ message: auth.error, type: "danger" }));
+      }
     }
   };
 
