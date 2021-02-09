@@ -21,6 +21,7 @@ const channelSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  participants: [],
 });
 
 module.exports = mongoose.model("Channel", channelSchema);
