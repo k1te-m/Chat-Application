@@ -45,8 +45,27 @@ server.listen(PORT, function () {
 
 io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected.`);
-  socket.emit("connection", null);
   socket.on("disconnect", () =>
     console.log(`Socket ${socket.id} disconnected.`)
   );
+  socket.on("USER_CONNECTED", (msg) => {
+    socket.broadcast.emit("LOGIN_MESSAGE", msg + " just logged in.");
+    console.log("User connected " + msg);
+  });
+
+  socket.on("subscribe", (data) => {
+    socket.join(data.room);
+    console.log("Joined: " + data.room);
+  });
+
+  socket.on("unsubscribe", (data) => {
+    socket.leave(data.room);
+    console.log("Left: " + data.room);
+  });
+
+  socket.on("SEND_MESSAGE", (data) => {
+    console.log(data);
+    console.log(`${data.author}: ${data.message}`);
+    io.sockets.in(data.room).emit(`${data.author}: ${data.message}`);
+  });
 });
