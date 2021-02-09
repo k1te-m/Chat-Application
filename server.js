@@ -36,6 +36,17 @@ mongoose.connect(process.env.MONGODB_URI || config.get("MONGODB_URI"), {
   useFindAndModify: false,
 });
 
-app.listen(PORT, function () {
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
+
+server.listen(PORT, function () {
   console.log(`🌎 ==> API server now on port ${PORT}!`);
+});
+
+io.on("connection", (socket) => {
+  console.log(`Socket ${socket.id} connected.`);
+  socket.emit("connection", null);
+  socket.on("disconnect", () =>
+    console.log(`Socket ${socket.id} disconnected.`)
+  );
 });
