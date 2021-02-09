@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Logo from "../../Logo";
-import {
-  selectAuth,
-  selectAuthUser,
-  LOGOUT,
-  loadUser,
-} from "../../auth/authSlice";
+import { selectAuth, loadUser } from "../../auth/authSlice";
 import {
   selectCurrentChannel,
   setChannel,
@@ -27,15 +22,17 @@ const InputContainer = styled.div`
 
 const Channel = () => {
   const auth = useSelector(selectAuth);
-  const channel = useSelector(selectCurrentChannel);
+  const currentChannel = useSelector(selectCurrentChannel);
   const dispatch = useDispatch();
 
   let localChannel = localStorage.getItem("channel");
 
   useEffect(() => {
-    dispatch(loadUser());
     dispatch(setChannel(localChannel));
-  }, []);
+    if (!auth.user) {
+      dispatch(loadUser());
+    }
+  }, [dispatch, localChannel, auth.user]);
 
   const [messageObject, setMessageObject] = useState({
     message: "",
@@ -51,7 +48,7 @@ const Channel = () => {
         <div className="container">
           <div className="row">
             <p>Hello {auth.user.username}!</p>
-            <span>Current Channel: {channel.name}</span>
+            <span>Current Channel: {currentChannel.name}</span>
           </div>
         </div>
         <MessageContainer className="container">
