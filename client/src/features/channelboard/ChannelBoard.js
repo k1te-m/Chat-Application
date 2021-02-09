@@ -13,7 +13,7 @@ import Modal from "../modal/Modal";
 import Logo from "../Logo";
 import { useHistory } from "react-router-dom";
 
-const ChannelBoard = ({ socket }) => {
+const ChannelBoard = () => {
   const auth = useSelector(selectAuth);
   const modal = useSelector(selectModal);
   const channel = useSelector(selectChannel);

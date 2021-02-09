@@ -5,8 +5,6 @@ import Logo from "../Logo";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, loadUser } from "../auth/authSlice";
 import ChannelBoard from "../channelboard/ChannelBoard";
-const io = require("socket.io-client");
-const socket = io();
 
 const LandingWrapper = styled.div`
   display: flex;
@@ -44,10 +42,6 @@ const Landing = () => {
     if (!auth.user) {
       dispatch(loadUser());
     }
-    socket.on("connection", () => {
-      console.log("I'm connected with the back-end");
-      console.log(socket.id);
-    });
   }, [dispatch, auth.user]);
 
   if (auth.user === null) {
@@ -74,7 +68,7 @@ const Landing = () => {
       </>
     );
   } else {
-    return <ChannelBoard socket={socket} />;
+    return <ChannelBoard />;
   }
 };
 
