@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAuth, registerUser, loadUser } from "../auth/authSlice";
+import { selectAuth, registerUser } from "../auth/authSlice";
 import { SET_ALERT } from "../../features/alert/alertSlice";
 
 const SignUp = (props) => {
