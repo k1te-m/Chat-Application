@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, LOGOUT, loadUser } from "../auth/authSlice";
 import { selectModal, TOGGLE_MODAL } from "../modal/modalSlice";
@@ -12,6 +12,7 @@ import { SET_ALERT } from "../../features/alert/alertSlice";
 import Modal from "../modal/Modal";
 import Logo from "../Logo";
 import { useHistory } from "react-router-dom";
+import SocketContext from "../context/socket";
 
 const ChannelBoard = () => {
   const auth = useSelector(selectAuth);
@@ -19,6 +20,7 @@ const ChannelBoard = () => {
   const channel = useSelector(selectChannel);
   const allChannels = useSelector(selectAllChannels);
   const dispatch = useDispatch();
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     dispatch(loadChannels());
