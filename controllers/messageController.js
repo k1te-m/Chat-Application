@@ -11,8 +11,7 @@ module.exports = {
   },
   getMessagesByChannel: (req, res) => {
     const channel = req.params.channel;
-    post
-      .find({ channel: channel })
+    Message.find({ channel: channel })
       .then((messages) => {
         res.json(messages);
       })
