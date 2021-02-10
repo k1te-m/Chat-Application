@@ -7,7 +7,7 @@ import {
   selectCurrentChannel,
   setChannel,
 } from "../../channelboard/channels/channelSlice";
-import { ADD_MESSAGE } from "../../chat/chatSlice";
+import { ADD_MESSAGE, selectChatMessages } from "../../chat/chatSlice";
 import SocketContext from "../../context/socket";
 import { useHistory } from "react-router-dom";
 
@@ -29,7 +29,8 @@ const Channel = (props) => {
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
   const channelID = props.match.params.channel;
-  let history = useHistory();
+  const chat = useSelector(selectChatMessages);
+  const history = useHistory();
 
   let localChannel = localStorage.getItem("channel");
 
@@ -39,9 +40,19 @@ const Channel = (props) => {
     }
     if (auth.user) {
       dispatch(setChannel(localChannel));
-      socket.emit("subscribe", { room: channelID, user: auth.user.username });
+      socket.emit("subscribe", {
+        channel: channelID,
+        user: auth.user.username,
+      });
       socket.on("CHAT_MESSAGE", (data) => {
         console.log(data);
+        dispatch(
+          ADD_MESSAGE({
+            message: data.message,
+            author: data.author,
+            channel: data.channel,
+          })
+        );
       });
     }
   }, [dispatch, localChannel, auth.user]);
@@ -65,15 +76,22 @@ const Channel = (props) => {
       message: message,
       author: auth.user.username,
     });
-    dispatch(
-      ADD_MESSAGE({
-        message: message,
-        author: auth.user.username,
-        channel: channelID,
-      })
-    );
     setMessageObject({ ...messageObject, message: "", author: "" });
   };
+
+  let messageList = <p>No Messages Found...</p>;
+
+  if (chat.length !== 0) {
+    let filteredMessages = chat.filter(
+      (messages) => messages.channel === channelID
+    );
+
+    messageList = filteredMessages.map((message) => (
+      <li>
+        {message.author}: {message.message}
+      </li>
+    ));
+  }
 
   if (!auth.user) {
     return <p>Loading...</p>;
@@ -89,6 +107,7 @@ const Channel = (props) => {
         </div>
         <MessageContainer className="container">
           <h3>Messages</h3>
+          <ul>{messageList}</ul>
         </MessageContainer>
         <InputContainer className="container">
           <form>
@@ -117,6 +136,7 @@ const Channel = (props) => {
                   channel: channelID,
                   user: auth.user.username,
                 });
+                socket.removeAllListeners("CHAT_MESSAGE");
               }}
             >
               Back
