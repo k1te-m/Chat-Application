@@ -45,27 +45,33 @@ server.listen(PORT, function () {
 
 io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected.`);
+
   socket.on("disconnect", () =>
     console.log(`Socket ${socket.id} disconnected.`)
   );
-  socket.on("USER_CONNECTED", (msg) => {
-    socket.broadcast.emit("LOGIN_MESSAGE", msg + " just logged in.");
-    console.log("User connected " + msg);
-  });
 
   socket.on("subscribe", (data) => {
-    socket.join(data.room);
-    console.log("Joined: " + data.room);
+    socket.join(data.channel);
+    console.log(`${data.user} joined channel: ` + data.room);
   });
 
   socket.on("unsubscribe", (data) => {
-    socket.leave(data.room);
-    console.log("Left: " + data.room);
+    socket.leave(data.channel);
+    console.log(`${data.user} left channel: ` + data.channel);
   });
 
   socket.on("SEND_MESSAGE", (data) => {
     console.log(data);
     console.log(`${data.author}: ${data.message}`);
-    io.sockets.in(data.room).emit(`${data.author}: ${data.message}`);
+    // io.in(`${data.channel}`).emit("CHAT_MESSAGE", data);
+    io.emit("CHAT_MESSAGE", data);
+    socket.on("error", (err) => {
+      console.log(err);
+    });
   });
+
+  // socket.on("USER_CONNECTED", (msg) => {
+  //   socket.broadcast.emit("LOGIN_MESSAGE", msg + " just logged in.");
+  //   console.log("User connected " + msg);
+  // });
 });
