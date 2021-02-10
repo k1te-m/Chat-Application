@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../Logo";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, loadUser } from "../auth/authSlice";
 import ChannelBoard from "../channelboard/ChannelBoard";
+import SocketContext from "../context/socket";
 
 const LandingWrapper = styled.div`
   display: flex;
@@ -37,10 +38,17 @@ const SignUpBtn = styled.button`
 const Landing = () => {
   const auth = useSelector(selectAuth);
   const dispatch = useDispatch();
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
-    dispatch(loadUser());
-  }, []);
+    if (!auth.user) {
+      dispatch(loadUser());
+    }
+    socket.on("connect", () => {
+      console.log("Connected with the back-end.");
+      console.log(socket.id);
+    });
+  }, [auth.user]);
 
   if (auth.user === null) {
     return (

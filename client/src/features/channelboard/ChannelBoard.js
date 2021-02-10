@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAuth, LOGOUT } from "../auth/authSlice";
+import { selectAuth, LOGOUT, loadUser } from "../auth/authSlice";
 import { selectModal, TOGGLE_MODAL } from "../modal/modalSlice";
 import {
   selectChannel,
@@ -12,6 +12,7 @@ import { SET_ALERT } from "../../features/alert/alertSlice";
 import Modal from "../modal/Modal";
 import Logo from "../Logo";
 import { useHistory } from "react-router-dom";
+import SocketContext from "../context/socket";
 
 const ChannelBoard = () => {
   const auth = useSelector(selectAuth);
@@ -19,10 +20,14 @@ const ChannelBoard = () => {
   const channel = useSelector(selectChannel);
   const allChannels = useSelector(selectAllChannels);
   const dispatch = useDispatch();
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     dispatch(loadChannels());
-  }, []);
+    if (!auth.user) {
+      dispatch(loadUser());
+    }
+  }, [auth.user, dispatch]);
 
   let history = useHistory();
 
@@ -60,6 +65,25 @@ const ChannelBoard = () => {
     }
   };
 
+  let channelList = <p>🙈 No channels found!</p>;
+
+  if (allChannels !== []) {
+    channelList = allChannels.map((channel) => (
+      <div key={channel._id} className="card">
+        <a
+          onClick={() => {
+            localStorage.setItem("channel", channel._id);
+            history.push(`/${channel.name}`);
+          }}
+        >
+          <h1>{channel.name}</h1>
+        </a>
+        <span>{channel.description}</span>
+        <span>Users: {channel.participants.length}</span>
+      </div>
+    ));
+  }
+
   return (
     <>
       <div className="container">
@@ -77,19 +101,7 @@ const ChannelBoard = () => {
         </div>
         <div className="row">
           <h1>Available Channels</h1>
-          {allChannels.map((channel) => (
-            <div key={channel._id} className="card">
-              <a
-                onClick={() => {
-                  localStorage.setItem("channel", channel._id);
-                  history.push(`/${channel.name}`);
-                }}
-              >
-                <h1>{channel.name}</h1>
-              </a>
-              <span>{channel.description}</span>
-            </div>
-          ))}
+          {channelList}
         </div>
       </div>
       <Modal isOpen={modal} handleClose={() => dispatch(TOGGLE_MODAL())}>

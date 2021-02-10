@@ -36,6 +36,42 @@ mongoose.connect(process.env.MONGODB_URI || config.get("MONGODB_URI"), {
   useFindAndModify: false,
 });
 
-app.listen(PORT, function () {
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
+
+server.listen(PORT, function () {
   console.log(`🌎 ==> API server now on port ${PORT}!`);
+});
+
+io.on("connection", (socket) => {
+  console.log(`Socket ${socket.id} connected.`);
+
+  socket.on("disconnect", () =>
+    console.log(`Socket ${socket.id} disconnected.`)
+  );
+
+  socket.on("subscribe", (data) => {
+    socket.join(data.channel);
+    console.log(`${data.user} joined channel: ` + data.room);
+  });
+
+  socket.on("unsubscribe", (data) => {
+    socket.leave(data.channel);
+    console.log(`${data.user} left channel: ` + data.channel);
+  });
+
+  socket.on("SEND_MESSAGE", (data) => {
+    console.log(data);
+    console.log(`${data.author}: ${data.message}`);
+    // io.in(`${data.channel}`).emit("CHAT_MESSAGE", data);
+    io.emit("CHAT_MESSAGE", data);
+    socket.on("error", (err) => {
+      console.log(err);
+    });
+  });
+
+  // socket.on("USER_CONNECTED", (msg) => {
+  //   socket.broadcast.emit("LOGIN_MESSAGE", msg + " just logged in.");
+  //   console.log("User connected " + msg);
+  // });
 });

@@ -21,7 +21,7 @@ function auth(req, res, next) {
     // Add user from payload
     req.user = decoded;
     next();
-  } catch (e) {
+  } catch (err) {
     res.status(400).json({ msg: "Token is not valid" });
   }
 }
