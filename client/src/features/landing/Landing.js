@@ -48,7 +48,7 @@ const Landing = () => {
       console.log("Connected with the back-end.");
       console.log(socket.id);
     });
-  }, [dispatch, auth.user]);
+  }, [auth.user]);
 
   if (auth.user === null) {
     return (
