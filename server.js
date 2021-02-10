@@ -63,7 +63,7 @@ io.on("connection", (socket) => {
 
   socket.on("SEND_MESSAGE", (data) => {
     console.log(data);
-    console.log(`${data.author}: ${data.message}`);
+    console.log(`${data.username}: ${data.message}`);
     io.in(data.channel).emit("CHAT_MESSAGE", data);
     socket.on("error", (err) => {
       console.log(err);

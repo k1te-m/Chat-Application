@@ -10,8 +10,7 @@ export const messagesSlice = createSlice({
     MESSAGE_RECEIVED: (state, action) => {
       state.push({
         message: action.payload.message,
-        author: action.payload.author,
-        id: action.payload.id,
+        username: action.payload.username,
       });
     },
   },

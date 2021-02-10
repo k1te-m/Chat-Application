@@ -7,9 +7,14 @@ import {
   selectCurrentChannel,
   setChannel,
 } from "../../channelboard/channels/channelSlice";
-import { ADD_MESSAGE, selectChatMessages } from "../../chat/chatSlice";
+import {
+  ADD_MESSAGE,
+  selectChatMessages,
+  loadMessages,
+} from "../../chat/chatSlice";
 import SocketContext from "../../context/socket";
 import { useHistory } from "react-router-dom";
+import API from "../../../utils/API";
 
 const ChannelWrapper = styled.div`
   height: 100vh;
@@ -40,6 +45,7 @@ const Channel = (props) => {
     }
     if (auth.user) {
       dispatch(setChannel(localChannel));
+      dispatch(loadMessages(channelID));
       socket.emit("subscribe", {
         channel: channelID,
         user: auth.user.username,
@@ -49,7 +55,7 @@ const Channel = (props) => {
         dispatch(
           ADD_MESSAGE({
             message: data.message,
-            author: data.author,
+            username: data.username,
             channel: data.channel,
           })
         );
@@ -59,10 +65,10 @@ const Channel = (props) => {
 
   const [messageObject, setMessageObject] = useState({
     message: "",
-    author: "",
+    username: "",
   });
 
-  const { message, author } = messageObject;
+  const { message, username } = messageObject;
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -74,21 +80,27 @@ const Channel = (props) => {
     socket.emit("SEND_MESSAGE", {
       channel: channelID,
       message: message,
-      author: auth.user.username,
+      username: auth.user.username,
     });
-    setMessageObject({ ...messageObject, message: "", author: "" });
+    API.saveMessage({
+      message: message,
+      username: auth.user.username,
+      channel: channelID,
+      createdBy: auth.user._id,
+    });
+    setMessageObject({ ...messageObject, message: "", username: "" });
   };
 
   let messageList = <p>No Messages Found...</p>;
 
-  if (chat.length !== 0) {
-    let filteredMessages = chat.filter(
+  if (chat.messages.length !== 0) {
+    let filteredMessages = chat.messages.filter(
       (messages) => messages.channel === channelID
     );
 
     messageList = filteredMessages.map((message) => (
       <li>
-        {message.author}: {message.message}
+        {message.username}: {message.message}
       </li>
     ));
   }
