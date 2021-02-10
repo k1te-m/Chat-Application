@@ -6,4 +6,9 @@ const messagesController = require("../../controllers/messageController");
 // @access Public
 router.post("/", messagesController.saveMessage);
 
+// @route  GET api/messages/:channel
+// @desc   Get messages posted to specific channel
+// @access Public
+router.get("/:channel", messagesController.getMessagesByChannel);
+
 module.exports = router;
