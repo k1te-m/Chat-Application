@@ -12,6 +12,7 @@ export const chatSlice = createSlice({
       state.messages.push({
         message: action.payload.message,
         author: action.payload.author,
+        channel: action.payload.channel,
       });
     },
     SEND_MESSAGE: (state) => {
