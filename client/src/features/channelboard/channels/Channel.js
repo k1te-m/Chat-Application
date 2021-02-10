@@ -7,6 +7,7 @@ import {
   selectCurrentChannel,
   setChannel,
 } from "../../channelboard/channels/channelSlice";
+import { ADD_MESSAGE } from "../../chat/chatSlice";
 import SocketContext from "../../context/socket";
 import { useHistory } from "react-router-dom";
 
@@ -38,9 +39,11 @@ const Channel = (props) => {
     }
     if (auth.user) {
       dispatch(setChannel(localChannel));
+      socket.emit("subscribe", { room: channelID, user: auth.user.username });
+      socket.on("CHAT_MESSAGE", (data) => {
+        console.log(data);
+      });
     }
-
-    socket.emit("subscribe", { room: channelID });
   }, [dispatch, localChannel, auth.user]);
 
   const [messageObject, setMessageObject] = useState({
@@ -53,17 +56,23 @@ const Channel = (props) => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setMessageObject({ ...messageObject, [name]: value });
-    console.log(messageObject);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     socket.emit("SEND_MESSAGE", {
-      room: channelID,
+      channel: channelID,
       message: message,
       author: auth.user.username,
     });
-    setMessageObject({ ...messageObject, message: "" });
+    dispatch(
+      ADD_MESSAGE({
+        message: message,
+        author: auth.user.username,
+        channel: channelID,
+      })
+    );
+    setMessageObject({ ...messageObject, message: "", author: "" });
   };
 
   if (!auth.user) {
@@ -104,7 +113,10 @@ const Channel = (props) => {
             <button
               onClick={() => {
                 history.push("/");
-                socket.emit("unsubscribe", { room: channelID });
+                socket.emit("unsubscribe", {
+                  channel: channelID,
+                  user: auth.user.username,
+                });
               }}
             >
               Back
