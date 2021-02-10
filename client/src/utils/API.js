@@ -13,4 +13,7 @@ export default {
   saveMessage: async (data) => {
     return await axios.post("/api/messages", data);
   },
+  getMessagesByChannel: async (channel) => {
+    return await axios.get("/api/messages/" + channel);
+  },
 };
