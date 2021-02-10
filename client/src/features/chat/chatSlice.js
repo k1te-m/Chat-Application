@@ -24,6 +24,6 @@ export const chatSlice = createSlice({
 export const { ADD_MESSAGE, SEND_MESSAGE } = chatSlice.actions;
 
 // Selector
-export const selectChat = (state) => state.chat;
+export const selectChatMessages = (state) => state.chat.messages;
 
 export default chatSlice.reducer;
