@@ -10,4 +10,7 @@ export default {
   getChannelByID: async (id) => {
     return await axios.get("/api/channel/find/" + id);
   },
+  saveMessage: async (data) => {
+    return await axios.post("/api/messages", data);
+  },
 };

@@ -10,6 +10,7 @@ import {
 import { ADD_MESSAGE, selectChatMessages } from "../../chat/chatSlice";
 import SocketContext from "../../context/socket";
 import { useHistory } from "react-router-dom";
+import API from "../../../utils/API";
 
 const ChannelWrapper = styled.div`
   height: 100vh;
@@ -75,6 +76,12 @@ const Channel = (props) => {
       channel: channelID,
       message: message,
       author: auth.user.username,
+    });
+    API.saveMessage({
+      message: message,
+      username: auth.user.username,
+      channel: channelID,
+      createdBy: auth.user._id,
     });
     setMessageObject({ ...messageObject, message: "", author: "" });
   };

@@ -13,8 +13,9 @@ const messageSchema = new Schema({
     trim: true,
   },
   channel: {
-    type: Schema.Types.ObjectId,
-    ref: "Channel",
+    type: String,
+    required: true,
+    trim: true,
   },
   createdBy: {
     type: Schema.Types.ObjectId,
