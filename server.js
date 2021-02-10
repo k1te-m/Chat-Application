@@ -45,6 +45,7 @@ server.listen(PORT, function () {
 
 io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected.`);
+  console.log(" %s sockets connected", io.engine.clientsCount);
 
   socket.on("disconnect", () =>
     console.log(`Socket ${socket.id} disconnected.`)
@@ -52,7 +53,7 @@ io.on("connection", (socket) => {
 
   socket.on("subscribe", (data) => {
     socket.join(data.channel);
-    console.log(`${data.user} joined channel: ` + data.room);
+    console.log(`${data.user} joined channel: ` + data.channel);
   });
 
   socket.on("unsubscribe", (data) => {
@@ -63,8 +64,7 @@ io.on("connection", (socket) => {
   socket.on("SEND_MESSAGE", (data) => {
     console.log(data);
     console.log(`${data.author}: ${data.message}`);
-    // io.in(`${data.channel}`).emit("CHAT_MESSAGE", data);
-    io.emit("CHAT_MESSAGE", data);
+    io.in(data.channel).emit("CHAT_MESSAGE", data);
     socket.on("error", (err) => {
       console.log(err);
     });
