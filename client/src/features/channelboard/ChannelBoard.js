@@ -24,6 +24,7 @@ const ChannelBoard = () => {
 
   useEffect(() => {
     dispatch(loadChannels());
+    socket.removeAllListeners("CHAT_MESSAGE");
     if (!auth.user) {
       dispatch(loadUser());
     }
