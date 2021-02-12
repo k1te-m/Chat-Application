@@ -85,18 +85,14 @@ const Channel = (props) => {
     if (!auth.user) {
       dispatch(loadUser());
     }
+
     if (auth.user) {
       dispatch(setChannel(localChannel));
       dispatch(loadMessages(channelID));
-      const date = new Date();
+
       socket.emit("subscribe", {
         channel: channelID,
         user: auth.user.username,
-      });
-      socket.emit("USER_CONNECTED", {
-        channel: channelID,
-        user: auth.user.username,
-        timeStamp: date,
       });
       socket.on("CHAT_MESSAGE", (data) => {
         console.log(data);
@@ -110,7 +106,6 @@ const Channel = (props) => {
         );
       });
       socket.on("USER_LOGGEDIN", (data) => {
-        console.log(data);
         dispatch(
           ADD_MESSAGE({
             message: `${data.user} has joined ${data.channel}.`,
@@ -130,6 +125,14 @@ const Channel = (props) => {
           })
         );
       });
+      const date = new Date();
+      if (setChannelLoading === false && chat.isLoading === false) {
+        socket.emit("USER_CONNECTED", {
+          channel: channelID,
+          user: auth.user.username,
+          timeStamp: date,
+        });
+      }
     }
   }, [dispatch, localChannel, auth.user, channelID, socket]);
 
@@ -285,6 +288,8 @@ const Channel = (props) => {
                   timeStamp: date,
                 });
                 socket.removeAllListeners("CHAT_MESSAGE");
+                socket.removeAllListeners("USER_LOGGEDIN");
+                socket.removeAllListeners("USER_LOGGEDOUT");
               }}
             >
               Back
