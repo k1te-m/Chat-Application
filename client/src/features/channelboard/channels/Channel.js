@@ -85,9 +85,15 @@ const Channel = (props) => {
     if (auth.user) {
       dispatch(setChannel(localChannel));
       dispatch(loadMessages(channelID));
+      const date = new Date();
       socket.emit("subscribe", {
         channel: channelID,
         user: auth.user.username,
+      });
+      socket.emit("USER_CONNECTED", {
+        channel: channelID,
+        user: auth.user.username,
+        timeStamp: date,
       });
       socket.on("CHAT_MESSAGE", (data) => {
         console.log(data);
@@ -95,6 +101,27 @@ const Channel = (props) => {
           ADD_MESSAGE({
             message: data.message,
             username: data.username,
+            channel: data.channel,
+            timeStamp: data.timeStamp,
+          })
+        );
+      });
+      socket.on("USER_LOGGEDIN", (data) => {
+        console.log(data);
+        dispatch(
+          ADD_MESSAGE({
+            message: `${data.user} has joined ${data.channel}.`,
+            channel: data.channel,
+            timeStamp: data.timeStamp,
+          })
+        );
+      });
+
+      socket.on("USER_LOGGEDOUT", (data) => {
+        console.log(data);
+        dispatch(
+          ADD_MESSAGE({
+            message: `${data.user} has left ${data.channel}.`,
             channel: data.channel,
             timeStamp: data.timeStamp,
           })
@@ -247,6 +274,12 @@ const Channel = (props) => {
                 socket.emit("unsubscribe", {
                   channel: channelID,
                   user: auth.user.username,
+                });
+                const date = new Date();
+                socket.emit("USER_DISCONNECTED", {
+                  channel: channelID,
+                  user: auth.user.username,
+                  timeStamp: date,
                 });
                 socket.removeAllListeners("CHAT_MESSAGE");
               }}
