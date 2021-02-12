@@ -27,6 +27,7 @@ const MessageContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  white-space: pre-wrap;
 `;
 
 const InputContainer = styled.div``;
@@ -126,6 +127,12 @@ const Channel = (props) => {
     setMessageObject({ ...messageObject, message: "", username: "" });
   };
 
+  const enterSubmit = (event) => {
+    if (event.key === "Enter" && event.shiftKey == false) {
+      return handleSubmit(event);
+    }
+  };
+
   let messageList = <p>No Messages Found...</p>;
 
   const formatDate = (date) => {
@@ -197,7 +204,7 @@ const Channel = (props) => {
                 onChange={handleInputChange}
                 name="message"
                 placeholder="hiya"
-                type="text"
+                onKeyPress={enterSubmit}
               />
             </div>
             <div className="form-group">
