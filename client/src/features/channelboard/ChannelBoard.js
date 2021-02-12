@@ -14,6 +14,7 @@ import Logo from "../Logo";
 import { useHistory } from "react-router-dom";
 import SocketContext from "../context/socket";
 import styled from "styled-components";
+import Footer from "../footer/Footer";
 
 const ChannelCard = styled.div`
   border: 1px solid black;
@@ -23,9 +24,16 @@ const ChannelCard = styled.div`
   }
 `;
 
-const ChannelButton = styled.div``;
+const ChannelButton = styled.button``;
 
-const ChannelWrapper = styled.div``;
+const HeaderButton = styled.button``;
+
+const ChannelWrapper = styled.div`
+  overflow: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const WelcomeMessage = styled.h5``;
 
@@ -96,7 +104,7 @@ const ChannelBoard = () => {
           <h1>{channel.name}</h1>
         </ChannelButton>
         <span>{channel.description}</span>
-        <span>Users: {channel.participants.length}</span>
+        {/* <span>Users: {channel.participants.length}</span> */}
       </ChannelCard>
     ));
   }
@@ -110,18 +118,22 @@ const ChannelBoard = () => {
             <WelcomeMessage>Hello {auth.user.username}!</WelcomeMessage>
           </div>
           <div className="col-6">
-            <button
-              className="btn btn-success mt-2"
-              onClick={() => dispatch(TOGGLE_MODAL())}
-            >
-              Create Channel
-            </button>
-            <button
-              className="btn btn-success mt-2"
-              onClick={() => dispatch(LOGOUT())}
-            >
-              Logout
-            </button>
+            <div className="row mx-auto">
+              <HeaderButton
+                className="btn btn-success mt-2"
+                onClick={() => dispatch(TOGGLE_MODAL())}
+              >
+                Create Channel
+              </HeaderButton>
+            </div>
+            <div className="row mx-auto">
+              <HeaderButton
+                className="btn btn-success mt-2"
+                onClick={() => dispatch(LOGOUT())}
+              >
+                Logout
+              </HeaderButton>
+            </div>
           </div>
         </div>
         <div className="row">
@@ -129,6 +141,7 @@ const ChannelBoard = () => {
           <ChannelWrapper>{channelList}</ChannelWrapper>
         </div>
       </div>
+      <Footer />
       <Modal isOpen={modal} handleClose={() => dispatch(TOGGLE_MODAL())}>
         <div className="container">
           <form>
