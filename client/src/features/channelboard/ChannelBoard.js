@@ -7,6 +7,7 @@ import {
   loadChannels,
   createChannel,
   selectAllChannels,
+  selectAllChannelsLoading,
 } from "../channelboard/channels/channelSlice";
 import { SET_ALERT } from "../../features/alert/alertSlice";
 import Modal from "../modal/Modal";
@@ -15,6 +16,7 @@ import { useHistory } from "react-router-dom";
 import SocketContext from "../context/socket";
 import styled from "styled-components";
 import Footer from "../footer/Footer";
+import Loading from "../loading/Loading";
 
 const ChannelCard = styled.div`
   border: 1px solid black;
@@ -44,6 +46,7 @@ const ChannelBoard = () => {
   const allChannels = useSelector(selectAllChannels);
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
+  const allChannelsLoading = useSelector(selectAllChannelsLoading);
 
   useEffect(() => {
     dispatch(loadChannels());
@@ -109,73 +112,77 @@ const ChannelBoard = () => {
     ));
   }
 
-  return (
-    <>
-      <div className="container">
-        <div className="row">
-          <div className="col-6">
-            <Logo />
-            <WelcomeMessage>Hello {auth.user.username}!</WelcomeMessage>
+  if (allChannelsLoading) {
+    return <Loading />;
+  } else {
+    return (
+      <>
+        <div className="container">
+          <div className="row">
+            <div className="col-6">
+              <Logo />
+              <WelcomeMessage>Hello {auth.user.username}!</WelcomeMessage>
+            </div>
+            <div className="col-6">
+              <div className="row mx-auto">
+                <HeaderButton
+                  className="btn btn-success mt-2"
+                  onClick={() => dispatch(TOGGLE_MODAL())}
+                >
+                  Create Channel
+                </HeaderButton>
+              </div>
+              <div className="row mx-auto">
+                <HeaderButton
+                  className="btn btn-success mt-2"
+                  onClick={() => dispatch(LOGOUT())}
+                >
+                  Logout
+                </HeaderButton>
+              </div>
+            </div>
           </div>
-          <div className="col-6">
-            <div className="row mx-auto">
-              <HeaderButton
-                className="btn btn-success mt-2"
-                onClick={() => dispatch(TOGGLE_MODAL())}
+          <div className="row">
+            <h1>Available Channels</h1>
+            <ChannelWrapper>{channelList}</ChannelWrapper>
+          </div>
+        </div>
+        <Footer />
+        <Modal isOpen={modal} handleClose={() => dispatch(TOGGLE_MODAL())}>
+          <div className="container">
+            <form>
+              <div className="form-group">
+                <label>Channel Name</label>
+                <input
+                  value={name}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  name="name"
+                  placeholder="Lounge"
+                  type="text"
+                />
+                <label>Description</label>
+                <input
+                  value={description}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  name="description"
+                  placeholder="A place to hang for a while!"
+                  type="text"
+                />
+              </div>
+              <button
+                className="btn btn-success mt-2 mb-1"
+                onClick={handleFormSubmit}
               >
                 Create Channel
-              </HeaderButton>
-            </div>
-            <div className="row mx-auto">
-              <HeaderButton
-                className="btn btn-success mt-2"
-                onClick={() => dispatch(LOGOUT())}
-              >
-                Logout
-              </HeaderButton>
-            </div>
+              </button>
+            </form>
           </div>
-        </div>
-        <div className="row">
-          <h1>Available Channels</h1>
-          <ChannelWrapper>{channelList}</ChannelWrapper>
-        </div>
-      </div>
-      <Footer />
-      <Modal isOpen={modal} handleClose={() => dispatch(TOGGLE_MODAL())}>
-        <div className="container">
-          <form>
-            <div className="form-group">
-              <label>Channel Name</label>
-              <input
-                value={name}
-                onChange={handleInputChange}
-                className="form-control"
-                name="name"
-                placeholder="Lounge"
-                type="text"
-              />
-              <label>Description</label>
-              <input
-                value={description}
-                onChange={handleInputChange}
-                className="form-control"
-                name="description"
-                placeholder="A place to hang for a while!"
-                type="text"
-              />
-            </div>
-            <button
-              className="btn btn-success mt-2 mb-1"
-              onClick={handleFormSubmit}
-            >
-              Create Channel
-            </button>
-          </form>
-        </div>
-      </Modal>
-    </>
-  );
+        </Modal>
+      </>
+    );
+  }
 };
 
 export default ChannelBoard;
