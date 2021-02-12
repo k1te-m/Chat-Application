@@ -125,14 +125,15 @@ const Channel = (props) => {
           })
         );
       });
+
       const date = new Date();
-      if (setChannelLoading === false && chat.isLoading === false) {
+      setTimeout(() => {
         socket.emit("USER_CONNECTED", {
           channel: channelID,
           user: auth.user.username,
           timeStamp: date,
         });
-      }
+      }, 1000);
     }
   }, [dispatch, localChannel, auth.user, channelID, socket]);
 
