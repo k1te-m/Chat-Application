@@ -24,6 +24,7 @@ export const chatSlice = createSlice({
         message: action.payload.message,
         username: action.payload.username,
         channel: action.payload.channel,
+        timeStamp: action.payload.timeStamp,
       });
     },
     SEND_MESSAGE: (state) => {
