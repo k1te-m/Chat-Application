@@ -57,6 +57,7 @@ const Channel = (props) => {
             message: data.message,
             username: data.username,
             channel: data.channel,
+            timeStamp: data.timeStamp,
           })
         );
       });
@@ -78,11 +79,12 @@ const Channel = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const date = new Date();
+    // console.log(date);
     socket.emit("SEND_MESSAGE", {
       channel: channelID,
       message: message,
       username: auth.user.username,
-      timeStamp: date.toISOString(),
+      timeStamp: date,
     });
     API.saveMessage({
       message: message,
@@ -95,6 +97,20 @@ const Channel = (props) => {
 
   let messageList = <p>No Messages Found...</p>;
 
+  const formatDate = (date) => {
+    const dateObj = new Date(date);
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const formattedDate = dateObj.toLocaleString("en-US", {
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      timeZone: tz,
+    });
+    const formattedTime = formattedDate;
+    return formattedTime;
+  };
+
   if (chat.messages.length !== 0) {
     let filteredMessages = chat.messages.filter(
       (messages) => messages.channel === channelID
@@ -102,7 +118,7 @@ const Channel = (props) => {
 
     messageList = filteredMessages.map((message) => (
       <li>
-        {message.username}: {message.message}
+        {message.username} ({formatDate(message.timeStamp)}): {message.message}
       </li>
     ));
   }
