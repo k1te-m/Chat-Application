@@ -40,8 +40,10 @@ const ListItem = styled.li`
 `;
 
 const UsernameHeader = styled.h5`
-  font-size: 1rem;
-  text-decoration: underline;
+  h5 {
+    font-size: 1rem;
+    text-decoration: underline;
+  }
 `;
 
 const TimeStampHeader = styled.span`
@@ -147,15 +149,15 @@ const Channel = (props) => {
 
     messageList = filteredMessages.map((message) => (
       <ListItem>
-        <div className="container-fluid">
+        <div className="container">
           <div className="row">
-            <div className="col-3">
-              <UsernameHeader>{message.username} </UsernameHeader>
-            </div>
-            <div className="col-9 p-0">
-              <TimeStampHeader>
-                ({formatDate(message.timeStamp)}):
-              </TimeStampHeader>
+            <div className="col">
+              <UsernameHeader>
+                {message.username}{" "}
+                <TimeStampHeader>
+                  ({formatDate(message.timeStamp)}):
+                </TimeStampHeader>{" "}
+              </UsernameHeader>
             </div>
           </div>
           <div className="row">
