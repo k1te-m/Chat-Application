@@ -7,6 +7,7 @@ import { selectAuth, loadUser } from "../auth/authSlice";
 import ChannelBoard from "../channelboard/ChannelBoard";
 import SocketContext from "../context/socket";
 import Footer from "../footer/Footer";
+import Loading from "../loading/Loading";
 
 const LandingWrapper = styled.div`
   height: 68vh;
@@ -64,7 +65,9 @@ const Landing = () => {
     });
   }, [auth.user, dispatch, socket]);
 
-  if (auth.user === null) {
+  if (auth.isLoading) {
+    return <Loading />;
+  } else if (auth.user === null) {
     return (
       <>
         <LandingWrapper className="wrapper">
