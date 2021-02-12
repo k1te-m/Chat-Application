@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, loginUser } from "../auth/authSlice";
 import { SET_ALERT } from "../../features/alert/alertSlice";
+import styled from "styled-components";
+import Logo from "../Logo";
+
+const LoginContainer = styled.div``;
 
 const Login = (props) => {
   const auth = useSelector(selectAuth);
@@ -49,12 +53,15 @@ const Login = (props) => {
       }
     }
   };
+
   return (
-    <div className="container">
+    <LoginContainer className="container">
+      <Logo />
       <h3>Account Log in</h3>
       <form>
         <label htmlFor="email">Email</label>
         <input
+          className="form-control"
           onChange={handleInputChange}
           name="email"
           placeholder="ksmith@gmail.com"
@@ -62,15 +69,18 @@ const Login = (props) => {
         />
         <label htmlFor="password">Password</label>
         <input
+          className="form-control"
           onChange={handleInputChange}
           name="password"
           placeholder="password"
           value={password}
           type="password"
         />
-        <button onClick={handleFormSubmit}>Log in</button>
+        <button className="btn btn-success mt-2" onClick={handleFormSubmit}>
+          Log in
+        </button>
       </form>
-    </div>
+    </LoginContainer>
   );
 };
 

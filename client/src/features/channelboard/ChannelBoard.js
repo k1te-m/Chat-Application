@@ -13,6 +13,9 @@ import Modal from "../modal/Modal";
 import Logo from "../Logo";
 import { useHistory } from "react-router-dom";
 import SocketContext from "../context/socket";
+import styled from "styled-components";
+
+const ChannelButton = styled.button``;
 
 const ChannelBoard = () => {
   const auth = useSelector(selectAuth);
@@ -28,7 +31,7 @@ const ChannelBoard = () => {
     if (!auth.user) {
       dispatch(loadUser());
     }
-  }, [auth.user, dispatch]);
+  }, [auth.user, dispatch, socket]);
 
   let history = useHistory();
 
@@ -71,14 +74,15 @@ const ChannelBoard = () => {
   if (allChannels !== []) {
     channelList = allChannels.map((channel) => (
       <div key={channel._id} className="card">
-        <a
+        <ChannelButton
+          className="btn btn-success"
           onClick={() => {
             localStorage.setItem("channel", channel._id);
             history.push(`/${channel.name}`);
           }}
         >
           <h1>{channel.name}</h1>
-        </a>
+        </ChannelButton>
         <span>{channel.description}</span>
         <span>Users: {channel.participants.length}</span>
       </div>
@@ -94,10 +98,18 @@ const ChannelBoard = () => {
             <p>Hello {auth.user.username}!</p>
           </div>
           <div className="col-6">
-            <button onClick={() => dispatch(TOGGLE_MODAL())}>
+            <button
+              className="btn btn-success mt-2"
+              onClick={() => dispatch(TOGGLE_MODAL())}
+            >
               Create Channel
             </button>
-            <button onClick={() => dispatch(LOGOUT())}>Logout</button>
+            <button
+              className="btn btn-success mt-2"
+              onClick={() => dispatch(LOGOUT())}
+            >
+              Logout
+            </button>
           </div>
         </div>
         <div className="row">

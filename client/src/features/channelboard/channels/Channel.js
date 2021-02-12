@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Logo from "../../Logo";
@@ -16,16 +16,33 @@ import SocketContext from "../../context/socket";
 import { useHistory } from "react-router-dom";
 import API from "../../../utils/API";
 
-const ChannelWrapper = styled.div`
-  height: 100vh;
-`;
+const ChannelWrapper = styled.div``;
 
 const MessageContainer = styled.div`
-  height: 65vh;
+  height: 55vh;
+  max-height: 55vh;
+  overflow: auto;
+  background-color: #4a4a48;
+  color: #f2f2f2;
 `;
 
-const InputContainer = styled.div`
-  height: 20vh;
+const InputContainer = styled.div``;
+
+const List = styled.ul`
+  padding-left: 0rem;
+`;
+
+const ListItem = styled.li`
+  list-style-type: none;
+`;
+
+const UsernameHeader = styled.h5`
+  font-size: 1rem;
+  text-decoration: underline;
+`;
+
+const TimeStampHeader = styled.span`
+  font-size: 0.7rem;
 `;
 
 const Channel = (props) => {
@@ -39,7 +56,14 @@ const Channel = (props) => {
 
   let localChannel = localStorage.getItem("channel");
 
+  const messageEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
+    scrollToBottom();
     if (!auth.user) {
       dispatch(loadUser());
     }
@@ -62,14 +86,14 @@ const Channel = (props) => {
         );
       });
     }
-  }, [dispatch, localChannel, auth.user]);
+  }, [dispatch, localChannel, auth.user, channelID, socket]);
 
   const [messageObject, setMessageObject] = useState({
     message: "",
     username: "",
   });
 
-  const { message, username } = messageObject;
+  const { message } = messageObject;
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -117,9 +141,23 @@ const Channel = (props) => {
     );
 
     messageList = filteredMessages.map((message) => (
-      <li>
-        {message.username} ({formatDate(message.timeStamp)}): {message.message}
-      </li>
+      <ListItem>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-3">
+              <UsernameHeader>{message.username} </UsernameHeader>
+            </div>
+            <div className="col-9 p-0">
+              <TimeStampHeader>
+                ({formatDate(message.timeStamp)}):
+              </TimeStampHeader>
+            </div>
+          </div>
+          <div className="row">
+            <p>{message.message}</p>
+          </div>
+        </div>
+      </ListItem>
     ));
   }
 
@@ -127,23 +165,26 @@ const Channel = (props) => {
     return <p>Loading...</p>;
   } else {
     return (
-      <ChannelWrapper>
+      <ChannelWrapper className="container">
         <Logo />
-        <div className="container">
+        <div>
           <div className="row">
             <p>Hello {auth.user.username}!</p>
             <span>Current Channel: {currentChannel.name}</span>
           </div>
+          <div className="row">
+            <h3>Messages</h3>
+          </div>
         </div>
-        <MessageContainer className="container">
-          <h3>Messages</h3>
-          <ul>{messageList}</ul>
+        <MessageContainer>
+          <List className="message-list">{messageList}</List>
+          <div ref={messageEndRef} />
         </MessageContainer>
-        <InputContainer className="container">
-          <form>
+        <InputContainer className="row">
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Message:</label>
-              <input
+              <textarea
                 className="form-control"
                 value={message}
                 onChange={handleInputChange}
@@ -153,13 +194,17 @@ const Channel = (props) => {
               />
             </div>
             <div className="form-group">
-              <button className="message-send" onClick={handleSubmit}>
+              <button
+                type="submit"
+                className="form-control btn btn-success mt-2"
+              >
                 Submit
               </button>
             </div>
           </form>
           <div>
             <button
+              className="btn btn-success mt-2 mb-2"
               onClick={() => {
                 history.push("/");
                 socket.emit("unsubscribe", {
