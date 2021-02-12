@@ -77,10 +77,12 @@ const Channel = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const date = new Date();
     socket.emit("SEND_MESSAGE", {
       channel: channelID,
       message: message,
       username: auth.user.username,
+      timeStamp: date.toISOString(),
     });
     API.saveMessage({
       message: message,
