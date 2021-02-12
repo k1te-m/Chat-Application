@@ -55,7 +55,9 @@
   None
   
   ## Future Development
-  *Allow users to choose/upload avatar*
+    - Allow users to choose/upload avatar
+    - Emoji Keyboard
+    - Image/small video upload
   
 
   ## Questions
