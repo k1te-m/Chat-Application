@@ -11,6 +11,7 @@ export const messagesSlice = createSlice({
       state.push({
         message: action.payload.message,
         username: action.payload.username,
+        timeStamp: action.payload.timeStamp,
       });
     },
   },
