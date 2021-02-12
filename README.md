@@ -24,6 +24,8 @@
 
   Project is intended to be used for real-time communication between users. Users can create, join, or leave channels. Once in a channel, messages will be sent to all other users currenty in the channel and are also saved to the DB for persistent conversations. 
   
+  ![](demoScreenShot.png)
+  
   If you would like to demo the application, please visit the below Heroku link and utilize the below login information:
   
   [Heroku](https://calm-springs-46357.herokuapp.com/)
