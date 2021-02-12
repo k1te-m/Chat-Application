@@ -15,6 +15,7 @@ import {
 import SocketContext from "../../context/socket";
 import { useHistory } from "react-router-dom";
 import API from "../../../utils/API";
+import { SET_ALERT } from "../../alert/alertSlice";
 
 const ChannelWrapper = styled.div``;
 
@@ -110,21 +111,27 @@ const Channel = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const date = new Date();
-    // console.log(date);
-    socket.emit("SEND_MESSAGE", {
-      channel: channelID,
-      message: message,
-      username: auth.user.username,
-      timeStamp: date,
-    });
-    API.saveMessage({
-      message: message,
-      username: auth.user.username,
-      channel: channelID,
-      createdBy: auth.user._id,
-    });
-    setMessageObject({ ...messageObject, message: "", username: "" });
+    if (!message) {
+      dispatch(
+        SET_ALERT({ message: "Please enter a message.", type: "danger" })
+      );
+    } else {
+      const date = new Date();
+      // console.log(date);
+      socket.emit("SEND_MESSAGE", {
+        channel: channelID,
+        message: message,
+        username: auth.user.username,
+        timeStamp: date,
+      });
+      API.saveMessage({
+        message: message,
+        username: auth.user.username,
+        channel: channelID,
+        createdBy: auth.user._id,
+      });
+      setMessageObject({ ...messageObject, message: "", username: "" });
+    }
   };
 
   const enterSubmit = (event) => {
