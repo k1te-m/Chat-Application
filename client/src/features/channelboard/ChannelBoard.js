@@ -51,6 +51,9 @@ const ChannelBoard = () => {
   useEffect(() => {
     dispatch(loadChannels());
     socket.removeAllListeners("CHAT_MESSAGE");
+    socket.removeAllListeners("USER_LOGGEDIN");
+    socket.removeAllListeners("USER_LOGGEDOUT");
+
     if (!auth.user) {
       dispatch(loadUser());
     }
