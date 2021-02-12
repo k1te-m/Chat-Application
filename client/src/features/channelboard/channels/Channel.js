@@ -95,7 +95,6 @@ const Channel = (props) => {
         user: auth.user.username,
       });
       socket.on("CHAT_MESSAGE", (data) => {
-        console.log(data);
         dispatch(
           ADD_MESSAGE({
             message: data.message,
@@ -116,7 +115,6 @@ const Channel = (props) => {
       });
 
       socket.on("USER_LOGGEDOUT", (data) => {
-        console.log(data);
         dispatch(
           ADD_MESSAGE({
             message: `${data.user} has left ${data.channel}.`,
@@ -157,7 +155,6 @@ const Channel = (props) => {
       );
     } else {
       const date = new Date();
-      // console.log(date);
       socket.emit("SEND_MESSAGE", {
         channel: channelID,
         message: message,
@@ -180,7 +177,7 @@ const Channel = (props) => {
     }
   };
 
-  let messageList = <ListItem>No Messages Found...</ListItem>;
+  let messageList = <ListItem key="No Messages">No Messages Found...</ListItem>;
 
   const formatDate = (date) => {
     const dateObj = new Date(date);
@@ -202,7 +199,7 @@ const Channel = (props) => {
     );
 
     messageList = filteredMessages.map((message) => (
-      <ListItem>
+      <ListItem key={message.timeStamp}>
         <div className="container">
           <div className="row">
             <div className="col">

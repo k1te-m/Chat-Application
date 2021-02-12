@@ -56,12 +56,7 @@ const Landing = () => {
       dispatch(loadUser());
     }
     socket.on("connect", () => {
-      console.log("Connected with the back-end.");
-      console.log(socket.id);
-
-      socket.on("disconnect", () => {
-        console.log(socket.id);
-      });
+      socket.on("disconnect", () => {});
     });
   }, [auth.user, dispatch, socket]);
 
