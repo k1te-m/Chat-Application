@@ -7,8 +7,20 @@ import { selectAuth, loadUser } from "../auth/authSlice";
 import ChannelBoard from "../channelboard/ChannelBoard";
 import SocketContext from "../context/socket";
 import Footer from "../footer/Footer";
+import Loading from "../loading/Loading";
 
-const LandingWrapper = styled.div``;
+const LandingWrapper = styled.div`
+  height: 68vh;
+  @media (min-width: 768px) {
+    height: 79vh;
+  }
+  @media (min-width: 992px) {
+    height: 84vh;
+  }
+  @media (min-width: 1200px) {
+    height: 79vh;
+  }
+`;
 
 const HeaderRow = styled.div`
   text-align: center;
@@ -53,7 +65,9 @@ const Landing = () => {
     });
   }, [auth.user, dispatch, socket]);
 
-  if (auth.user === null) {
+  if (auth.isLoading) {
+    return <Loading />;
+  } else if (auth.user === null) {
     return (
       <>
         <LandingWrapper className="wrapper">

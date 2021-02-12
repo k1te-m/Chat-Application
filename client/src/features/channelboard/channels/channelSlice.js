@@ -86,7 +86,11 @@ const channelSlice = createSlice({
 // Selector
 export const selectChannel = (state) => state.channel;
 export const selectAllChannels = (state) => state.channel.allChannels.channels;
+export const selectAllChannelsLoading = (state) =>
+  state.channel.allChannels.isLoading;
 export const selectCurrentChannel = (state) =>
   state.channel.currentChannel.channel;
+export const selectSetChannelLoading = (state) =>
+  state.channel.currentChannel.isLoading;
 
 export default channelSlice.reducer;

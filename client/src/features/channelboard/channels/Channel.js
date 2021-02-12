@@ -6,6 +6,7 @@ import { selectAuth, loadUser } from "../../auth/authSlice";
 import {
   selectCurrentChannel,
   setChannel,
+  selectSetChannelLoading,
 } from "../../channelboard/channels/channelSlice";
 import {
   ADD_MESSAGE,
@@ -15,18 +16,21 @@ import {
 import SocketContext from "../../context/socket";
 import { useHistory } from "react-router-dom";
 import API from "../../../utils/API";
+import { SET_ALERT } from "../../alert/alertSlice";
+import Loading from "../../loading/Loading";
 
 const ChannelWrapper = styled.div``;
 
 const MessageContainer = styled.div`
-  height: 55vh;
-  max-height: 55vh;
   overflow: auto;
   background-color: #4a4a48;
   color: #f2f2f2;
   ::-webkit-scrollbar {
     display: none;
   }
+  white-space: pre-wrap;
+  height: 55vh;
+  max-height: 55vh;
 `;
 
 const InputContainer = styled.div``;
@@ -40,11 +44,19 @@ const ListItem = styled.li`
 `;
 
 const UsernameHeader = styled.h5`
-  font-size: 1rem;
-  text-decoration: underline;
+  h5 {
+    font-size: 1rem;
+    text-decoration: underline;
+  }
+  color: #198754;
 `;
 
 const TimeStampHeader = styled.span`
+  font-size: 0.7rem;
+  color: #f2f2f2;
+`;
+
+const ScrollButton = styled.button`
   font-size: 0.7rem;
 `;
 
@@ -56,6 +68,7 @@ const Channel = (props) => {
   const channelID = props.match.params.channel;
   const chat = useSelector(selectChatMessages);
   const history = useHistory();
+  const setChannelLoading = useSelector(selectSetChannelLoading);
 
   let localChannel = localStorage.getItem("channel");
 
@@ -66,15 +79,12 @@ const Channel = (props) => {
   };
 
   useEffect(() => {
-    scrollToBottom();
     if (!auth.user) {
       dispatch(loadUser());
-      scrollToBottom();
     }
     if (auth.user) {
       dispatch(setChannel(localChannel));
       dispatch(loadMessages(channelID));
-      scrollToBottom();
       socket.emit("subscribe", {
         channel: channelID,
         user: auth.user.username,
@@ -107,24 +117,36 @@ const Channel = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const date = new Date();
-    // console.log(date);
-    socket.emit("SEND_MESSAGE", {
-      channel: channelID,
-      message: message,
-      username: auth.user.username,
-      timeStamp: date,
-    });
-    API.saveMessage({
-      message: message,
-      username: auth.user.username,
-      channel: channelID,
-      createdBy: auth.user._id,
-    });
-    setMessageObject({ ...messageObject, message: "", username: "" });
+    if (!message) {
+      dispatch(
+        SET_ALERT({ message: "Please enter a message.", type: "danger" })
+      );
+    } else {
+      const date = new Date();
+      // console.log(date);
+      socket.emit("SEND_MESSAGE", {
+        channel: channelID,
+        message: message,
+        username: auth.user.username,
+        timeStamp: date,
+      });
+      API.saveMessage({
+        message: message,
+        username: auth.user.username,
+        channel: channelID,
+        createdBy: auth.user._id,
+      });
+      setMessageObject({ ...messageObject, message: "", username: "" });
+    }
   };
 
-  let messageList = <p>No Messages Found...</p>;
+  const enterSubmit = (event) => {
+    if (event.key === "Enter" && event.shiftKey === false) {
+      return handleSubmit(event);
+    }
+  };
+
+  let messageList = <ListItem>No Messages Found...</ListItem>;
 
   const formatDate = (date) => {
     const dateObj = new Date(date);
@@ -147,15 +169,15 @@ const Channel = (props) => {
 
     messageList = filteredMessages.map((message) => (
       <ListItem>
-        <div className="container-fluid">
+        <div className="container">
           <div className="row">
-            <div className="col-3">
-              <UsernameHeader>{message.username} </UsernameHeader>
-            </div>
-            <div className="col-9 p-0">
-              <TimeStampHeader>
-                ({formatDate(message.timeStamp)}):
-              </TimeStampHeader>
+            <div className="col">
+              <UsernameHeader>
+                {message.username}{" "}
+                <TimeStampHeader>
+                  ({formatDate(message.timeStamp)}):
+                </TimeStampHeader>{" "}
+              </UsernameHeader>
             </div>
           </div>
           <div className="row">
@@ -166,16 +188,26 @@ const Channel = (props) => {
     ));
   }
 
-  if (!auth.user) {
-    return <p>Loading...</p>;
+  if (!auth.user || setChannelLoading) {
+    return <Loading />;
   } else {
     return (
       <ChannelWrapper className="container">
-        <Logo />
         <div>
           <div className="row">
-            <p>Hello {auth.user.username}!</p>
-            <span>Current Channel: {currentChannel.name}</span>
+            <div className="col-8">
+              <Logo />
+              <p>Hello {auth.user.username}!</p>
+              <span>Current Channel: {currentChannel.name}</span>
+            </div>
+            <div className="col-4">
+              <ScrollButton
+                className="btn btn-success mt-4"
+                onClick={scrollToBottom}
+              >
+                Scroll to Most Recent Message
+              </ScrollButton>
+            </div>
           </div>
           <div className="row">
             <h3>Messages</h3>
@@ -195,7 +227,7 @@ const Channel = (props) => {
                 onChange={handleInputChange}
                 name="message"
                 placeholder="hiya"
-                type="text"
+                onKeyPress={enterSubmit}
               />
             </div>
             <div className="form-group">
@@ -209,7 +241,7 @@ const Channel = (props) => {
           </form>
           <div>
             <button
-              className="btn btn-success mt-2 mb-2"
+              className="btn btn-success mt-2 mb-2 w-100"
               onClick={() => {
                 history.push("/");
                 socket.emit("unsubscribe", {
