@@ -26,7 +26,7 @@
   
   If you would like to demo the application, please visit the below Heroku link and utilize the below login information:
   
-  *[Heroku](https://calm-springs-46357.herokuapp.com/)
+  [Heroku](https://calm-springs-46357.herokuapp.com/)
   
 
   ## Contributing
