@@ -58,6 +58,7 @@
     - Allow users to choose/upload avatar
     - Emoji Keyboard
     - Image/small video upload
+    - Further CSS updates
   
 
   ## Questions
