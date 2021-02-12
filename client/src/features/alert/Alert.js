@@ -18,7 +18,7 @@ const fadeIn = keyframes`
 const StyledAlert = styled.div`
   position: fixed;
   left: 50%;
-  top: 40%;
+  top: 42.5%;
   z-index: 9999;
   transform: translate(-50%, 0);
   animation: ${fadeIn} 0.7s linear;
