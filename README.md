@@ -55,6 +55,7 @@
   None
   
   ## Future Development
+    - Automatic scroll to bottom of chat, currently buggy
     - Allow users to choose/upload avatar
     - Emoji Keyboard
     - Image/small video upload
