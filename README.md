@@ -55,6 +55,7 @@
   None
   
   ## Future Development
+  *Allow users to choose/upload avatar*
   
 
   ## Questions
