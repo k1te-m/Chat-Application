@@ -70,8 +70,12 @@ io.on("connection", (socket) => {
     });
   });
 
-  // socket.on("USER_CONNECTED", (msg) => {
-  //   socket.broadcast.emit("LOGIN_MESSAGE", msg + " just logged in.");
-  //   console.log("User connected " + msg);
-  // });
+  socket.on("USER_CONNECTED", (data) => {
+    io.in(data.channel).emit("USER_LOGGEDIN", data);
+  });
+
+  socket.on("USER_DISCONNECTED", (data) => {
+    console.log(data);
+    io.in(data.channel).emit("USER_LOGGEDOUT", data);
+  });
 });
