@@ -10,6 +10,7 @@
   * [Usage](#usage)
   * [Contributing](#contributing)
   * [Tests](#tests)
+  * [Future Development](#future-development)
   * [Questions](#questions)
 
   ## Installation 
@@ -52,6 +53,15 @@
   ## License
 
   None
+  
+  ## Future Development
+    - Automatic scroll to bottom of chat, currently buggy
+    - Allow users to choose/upload avatar
+    - Emoji Keyboard
+    - Image/small video upload
+    - Further CSS updates
+    - User is typing... functionality 
+    - Display active users in each channel
   
 
   ## Questions
