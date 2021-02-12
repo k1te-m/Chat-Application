@@ -52,7 +52,7 @@
 
   ## License
 
-  None
+  MIT License
   
   ## Future Development
     - Automatic scroll to bottom of chat, currently buggy
