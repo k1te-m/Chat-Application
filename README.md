@@ -28,6 +28,10 @@
   
   [Heroku](https://calm-springs-46357.herokuapp.com/)
   
+  *Guest Login Information:*
+  Email: guest@guest.com
+  Password: demo312
+  
 
   ## Contributing
 
