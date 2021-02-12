@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, loadUser } from "../auth/authSlice";
 import ChannelBoard from "../channelboard/ChannelBoard";
 import SocketContext from "../context/socket";
+import Footer from "../footer/Footer";
 
 const LandingWrapper = styled.div``;
 
@@ -73,6 +74,7 @@ const Landing = () => {
             </LoginRow>
           </div>
         </LandingWrapper>
+        <Footer />
       </>
     );
   } else {
