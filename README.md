@@ -59,6 +59,8 @@
     - Emoji Keyboard
     - Image/small video upload
     - Further CSS updates
+    - User is typing... functionality 
+    - Display active users in each channel
   
 
   ## Questions
