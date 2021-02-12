@@ -1,3 +1,4 @@
+// Dependencies
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -19,6 +20,7 @@ import API from "../../../utils/API";
 import { SET_ALERT } from "../../alert/alertSlice";
 import Loading from "../../loading/Loading";
 
+// Styled Components
 const ChannelWrapper = styled.div``;
 
 const MessageContainer = styled.div`
@@ -60,6 +62,7 @@ const ScrollButton = styled.button`
   font-size: 0.7rem;
 `;
 
+// React Component
 const Channel = (props) => {
   const auth = useSelector(selectAuth);
   const currentChannel = useSelector(selectCurrentChannel);
