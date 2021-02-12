@@ -4,6 +4,7 @@ import { selectAuth, loginUser } from "../auth/authSlice";
 import { SET_ALERT } from "../../features/alert/alertSlice";
 import styled from "styled-components";
 import Logo from "../Logo";
+import Footer from "../footer/Footer";
 
 const LoginContainer = styled.div``;
 
@@ -55,32 +56,35 @@ const Login = (props) => {
   };
 
   return (
-    <LoginContainer className="container">
-      <Logo />
-      <h3>Account Log in</h3>
-      <form>
-        <label htmlFor="email">Email</label>
-        <input
-          className="form-control"
-          onChange={handleInputChange}
-          name="email"
-          placeholder="ksmith@gmail.com"
-          type="email"
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          className="form-control"
-          onChange={handleInputChange}
-          name="password"
-          placeholder="password"
-          value={password}
-          type="password"
-        />
-        <button className="btn btn-success mt-2" onClick={handleFormSubmit}>
-          Log in
-        </button>
-      </form>
-    </LoginContainer>
+    <>
+      <LoginContainer className="container">
+        <Logo />
+        <h3>Account Log in</h3>
+        <form>
+          <label htmlFor="email">Email</label>
+          <input
+            className="form-control"
+            onChange={handleInputChange}
+            name="email"
+            placeholder="ksmith@gmail.com"
+            type="email"
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            className="form-control"
+            onChange={handleInputChange}
+            name="password"
+            placeholder="password"
+            value={password}
+            type="password"
+          />
+          <button className="btn btn-success mt-2" onClick={handleFormSubmit}>
+            Log in
+          </button>
+        </form>
+      </LoginContainer>
+      <Footer />
+    </>
   );
 };
 

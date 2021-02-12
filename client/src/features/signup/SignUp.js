@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAuth, registerUser } from "../auth/authSlice";
 import { SET_ALERT } from "../../features/alert/alertSlice";
+import Footer from "../footer/Footer";
+import Logo from "../Logo";
 
 const SignUp = (props) => {
   const auth = useSelector(selectAuth);
@@ -58,60 +60,64 @@ const SignUp = (props) => {
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <h3>Create account</h3>
+    <>
+      <div className="container">
+        <Logo />
+        <div className="row">
+          <h3>Create account</h3>
+        </div>
+        <div className="row">
+          <form>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                onChange={handleInputChange}
+                className="form-control"
+                name="name"
+                placeholder="Kelly Smith"
+                type="text"
+              />
+              <label htmlFor="username">Username</label>
+              <input
+                onChange={handleInputChange}
+                className="form-control"
+                name="username"
+                placeholder="ksmithdev"
+                type="text"
+              />
+              <label htmlFor="email">Email</label>
+              <input
+                onChange={handleInputChange}
+                className="form-control"
+                name="email"
+                placeholder="ksmith@gmail.com"
+                type="email"
+              />
+              <label htmlFor="password">Password</label>
+              <input
+                onChange={handleInputChange}
+                className="form-control"
+                name="password"
+                placeholder="Password"
+                type="password"
+              />
+              <label htmlFor="password2">Confirm Password</label>
+              <input
+                onChange={handleInputChange}
+                className="form-control"
+                name="password2"
+                placeholder="Confirm Password"
+                type="password"
+              />
+            </div>
+            <button className="btn btn-success mt-2" onClick={handleFormSubmit}>
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
-      <div className="row">
-        <form>
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              onChange={handleInputChange}
-              className="form-control"
-              name="name"
-              placeholder="Kelly Smith"
-              type="text"
-            />
-            <label htmlFor="username">Username</label>
-            <input
-              onChange={handleInputChange}
-              className="form-control"
-              name="username"
-              placeholder="ksmithdev"
-              type="text"
-            />
-            <label htmlFor="email">Email</label>
-            <input
-              onChange={handleInputChange}
-              className="form-control"
-              name="email"
-              placeholder="ksmith@gmail.com"
-              type="email"
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              onChange={handleInputChange}
-              className="form-control"
-              name="password"
-              placeholder="Password"
-              type="password"
-            />
-            <label htmlFor="password2">Confirm Password</label>
-            <input
-              onChange={handleInputChange}
-              className="form-control"
-              name="password2"
-              placeholder="Confirm Password"
-              type="password"
-            />
-          </div>
-          <button className="btn btn-success mt-2" onClick={handleFormSubmit}>
-            Submit
-          </button>
-        </form>
-      </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
