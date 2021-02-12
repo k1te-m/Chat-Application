@@ -10,7 +10,7 @@
   * [Usage](#usage)
   * [Contributing](#contributing)
   * [Tests](#tests)
-  * [Future Development](#future)
+  * [Future Development](#future-development)
   * [Questions](#questions)
 
   ## Installation 
