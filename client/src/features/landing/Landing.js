@@ -7,9 +7,7 @@ import { selectAuth, loadUser } from "../auth/authSlice";
 import ChannelBoard from "../channelboard/ChannelBoard";
 import SocketContext from "../context/socket";
 
-const LandingWrapper = styled.div`
-  display: flex;
-`;
+const LandingWrapper = styled.div``;
 
 const HeaderRow = styled.div`
   text-align: center;
@@ -52,7 +50,7 @@ const Landing = () => {
         console.log(socket.id);
       });
     });
-  }, [auth.user]);
+  }, [auth.user, dispatch, socket]);
 
   if (auth.user === null) {
     return (
@@ -65,12 +63,12 @@ const Landing = () => {
             </HeaderRow>
             <SignUpRow className="row">
               <Link to="/signup">
-                <SignUpBtn>Sign up</SignUpBtn>
+                <SignUpBtn className="btn btn-success mb-1">Sign up</SignUpBtn>
               </Link>
             </SignUpRow>
             <LoginRow className="row">
               <Link to="/login">
-                <LoginBtn>Log in</LoginBtn>
+                <LoginBtn className="btn btn-success">Log in</LoginBtn>
               </Link>
             </LoginRow>
           </div>
