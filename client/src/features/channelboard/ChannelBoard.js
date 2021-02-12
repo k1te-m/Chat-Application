@@ -15,7 +15,19 @@ import { useHistory } from "react-router-dom";
 import SocketContext from "../context/socket";
 import styled from "styled-components";
 
-const ChannelButton = styled.button``;
+const ChannelCard = styled.div`
+  border: 1px solid black;
+  margin-bottom: 1rem;
+  span {
+    text-align: center;
+  }
+`;
+
+const ChannelButton = styled.div``;
+
+const ChannelWrapper = styled.div``;
+
+const WelcomeMessage = styled.h5``;
 
 const ChannelBoard = () => {
   const auth = useSelector(selectAuth);
@@ -73,7 +85,7 @@ const ChannelBoard = () => {
 
   if (allChannels !== []) {
     channelList = allChannels.map((channel) => (
-      <div key={channel._id} className="card">
+      <ChannelCard key={channel._id} className="card">
         <ChannelButton
           className="btn btn-success"
           onClick={() => {
@@ -85,7 +97,7 @@ const ChannelBoard = () => {
         </ChannelButton>
         <span>{channel.description}</span>
         <span>Users: {channel.participants.length}</span>
-      </div>
+      </ChannelCard>
     ));
   }
 
@@ -95,7 +107,7 @@ const ChannelBoard = () => {
         <div className="row">
           <div className="col-6">
             <Logo />
-            <p>Hello {auth.user.username}!</p>
+            <WelcomeMessage>Hello {auth.user.username}!</WelcomeMessage>
           </div>
           <div className="col-6">
             <button
@@ -114,7 +126,7 @@ const ChannelBoard = () => {
         </div>
         <div className="row">
           <h1>Available Channels</h1>
-          {channelList}
+          <ChannelWrapper>{channelList}</ChannelWrapper>
         </div>
       </div>
       <Modal isOpen={modal} handleClose={() => dispatch(TOGGLE_MODAL())}>
@@ -140,7 +152,12 @@ const ChannelBoard = () => {
                 type="text"
               />
             </div>
-            <button onClick={handleFormSubmit}>Create Channel</button>
+            <button
+              className="btn btn-success mt-2 mb-1"
+              onClick={handleFormSubmit}
+            >
+              Create Channel
+            </button>
           </form>
         </div>
       </Modal>

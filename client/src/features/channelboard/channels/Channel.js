@@ -24,6 +24,9 @@ const MessageContainer = styled.div`
   overflow: auto;
   background-color: #4a4a48;
   color: #f2f2f2;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const InputContainer = styled.div``;
@@ -66,10 +69,12 @@ const Channel = (props) => {
     scrollToBottom();
     if (!auth.user) {
       dispatch(loadUser());
+      scrollToBottom();
     }
     if (auth.user) {
       dispatch(setChannel(localChannel));
       dispatch(loadMessages(channelID));
+      scrollToBottom();
       socket.emit("subscribe", {
         channel: channelID,
         user: auth.user.username,
