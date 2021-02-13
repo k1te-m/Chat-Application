@@ -21,6 +21,13 @@ _Steps required to install package:_
 
 To install locally, clone repository down to your machine. Then in your IDE navigate to server.js file and open in terminal. From there `npm i` will install all necessary front-end and back-end dependencies.
 
+Additionally, you will need to set up a config folder in the root of your project to handle your MongoDB URI and JWT Secret. There create a default.json file and populate it as follows: 
+
+`{
+    "MONGODB_URI": "YOUR URI STRING HERE",
+    "jwtSecret": "YOUR JWT SECRET STRING HERE"
+}`
+
 ## Usage
 
 _Examples of project use:_
