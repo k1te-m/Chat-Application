@@ -1,16 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { selectAuth } from "../auth/authSlice";
-import { useSelector } from "react-redux";
 
 const FooterStyled = styled.footer``;
 
 const Footer = () => {
-  const auth = useSelector(selectAuth);
-
-  const { user } = auth;
-
   return (
     <FooterStyled className="footer font-small">
       <div className="container text-center">
