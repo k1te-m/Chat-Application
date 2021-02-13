@@ -17,6 +17,7 @@ const initialState = {
     isLoading: false,
     channel: {},
   },
+  channelPopulations: [],
 };
 
 export const createChannel = createAsyncThunk(
@@ -46,7 +47,14 @@ export const setChannel = createAsyncThunk(
 const channelSlice = createSlice({
   name: "channel",
   initialState,
-  reducers: {},
+  reducers: {
+    SET_POPULATIONS: (state, action) => {
+      state.channelPopulations.push({
+        channel: action.payload.channel,
+        population: action.payload.population,
+      });
+    },
+  },
   extraReducers: {
     [loadChannels.pending]: (state) => {
       state.allChannels.isLoading = true;
@@ -83,7 +91,10 @@ const channelSlice = createSlice({
   },
 });
 
-// Selector
+// Actions
+export const { SET_POPULATIONS } = channelSlice.actions;
+
+// Selectors
 export const selectChannel = (state) => state.channel;
 export const selectAllChannels = (state) => state.channel.allChannels.channels;
 export const selectAllChannelsLoading = (state) =>
