@@ -33,6 +33,8 @@ const MessageContainer = styled.div`
   white-space: pre-wrap;
   height: 55vh;
   max-height: 55vh;
+  display: flex;
+  flex-direction: column-reverse;
 `;
 
 const InputContainer = styled.div``;
@@ -236,7 +238,7 @@ const Channel = (props) => {
                 className="btn btn-success mt-4"
                 onClick={scrollToBottom}
               >
-                Scroll to Most Recent Message
+                Scroll to Top of Messages
               </ScrollButton>
             </div>
           </div>
