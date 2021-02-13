@@ -71,6 +71,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("USER_CONNECTED", (data) => {
+    console.log(io.sockets.adapter.rooms.get(data.channel).size);
+    io.emit("POPULATION_UPDATE", {
+      channel: data.channel,
+      population: io.sockets.adapter.rooms.get(data.channel).size,
+    });
     io.in(data.channel).emit("USER_LOGGEDIN", data);
   });
 
