@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const FooterStyled = styled.footer``;
+const FooterStyled = styled.footer`
+  a {
+    color: #198754;
+  }
+`;
 
 const Footer = () => {
   return (
@@ -10,13 +14,24 @@ const Footer = () => {
         <hr />
         <i className="fab fa-github" />
         <div className="row">
-          <a href="https://github.com/k1te-m/Chat-Application">
+          <a
+            href="https://github.com/k1te-m/Chat-Application"
+            target="_blank"
+            rel="noreferrer"
+          >
             GitHub Repository
           </a>
         </div>
         <div className="row">
           <span>
-            Developer: <a href="https://github.com/k1te-m">Kevin Miller</a>
+            Developer:{" "}
+            <a
+              href="https://github.com/k1te-m"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Kevin Miller
+            </a>
           </span>
         </div>
         <div className="row">
