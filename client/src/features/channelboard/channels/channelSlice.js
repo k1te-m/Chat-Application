@@ -16,6 +16,7 @@ const initialState = {
   currentChannel: {
     isLoading: false,
     channel: {},
+    channelPopulation: 0,
   },
   channelPopulations: [],
 };
@@ -48,11 +49,8 @@ const channelSlice = createSlice({
   name: "channel",
   initialState,
   reducers: {
-    SET_POPULATIONS: (state, action) => {
-      state.channelPopulations.push({
-        channel: action.payload.channel,
-        population: action.payload.population,
-      });
+    SET_POPULATION: (state, action) => {
+      state.currentChannel.channelPopulation = action.payload.population;
     },
   },
   extraReducers: {
@@ -92,7 +90,7 @@ const channelSlice = createSlice({
 });
 
 // Actions
-export const { SET_POPULATIONS } = channelSlice.actions;
+export const { SET_POPULATION } = channelSlice.actions;
 
 // Selectors
 export const selectChannel = (state) => state.channel;

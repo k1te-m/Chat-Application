@@ -53,6 +53,7 @@ const ChannelBoard = () => {
     socket.removeAllListeners("CHAT_MESSAGE");
     socket.removeAllListeners("USER_LOGGEDIN");
     socket.removeAllListeners("USER_LOGGEDOUT");
+    socket.removeAllListeners("POPULATION_UPDATE");
 
     if (!auth.user) {
       dispatch(loadUser());
@@ -110,8 +111,6 @@ const ChannelBoard = () => {
           <h1>{channel.name}</h1>
         </ChannelButton>
         <span>{channel.description}</span>
-
-        <span>Users:</span>
       </ChannelCard>
     ));
   }

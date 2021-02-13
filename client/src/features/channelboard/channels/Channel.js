@@ -8,6 +8,8 @@ import {
   selectCurrentChannel,
   setChannel,
   selectSetChannelLoading,
+  SET_POPULATION,
+  selectChannel,
 } from "../../channelboard/channels/channelSlice";
 import {
   ADD_MESSAGE,
@@ -74,6 +76,7 @@ const Channel = (props) => {
   const chat = useSelector(selectChatMessages);
   const history = useHistory();
   const setChannelLoading = useSelector(selectSetChannelLoading);
+  const channelMain = useSelector(selectChannel);
 
   let localChannel = localStorage.getItem("channel");
 
@@ -125,6 +128,18 @@ const Channel = (props) => {
           })
         );
       });
+
+      socket.on("POPULATION_UPDATE", (data) => {
+        dispatch(SET_POPULATION(data));
+      });
+
+      // if (channelMain.channelPopulations !== []) {
+      //   const getChannelPopulation = (id, array) => {
+      //     const channelInfo = array.filter((channel) => channel.name === id);
+      //     console.log(channelInfo);
+      //   };
+      //   getChannelPopulation(channelID, channelMain.channelPopulations);
+      // }
 
       const date = new Date();
       setTimeout(() => {
@@ -231,7 +246,6 @@ const Channel = (props) => {
             <div className="col-8">
               <Logo />
               <p>Hello {auth.user.username}!</p>
-              <span>Current Channel: {currentChannel.name}</span>
             </div>
             <div className="col-4">
               <ScrollButton
@@ -243,7 +257,16 @@ const Channel = (props) => {
             </div>
           </div>
           <div className="row">
-            <h3>Messages</h3>
+            <span>Current Channel: {currentChannel.name}</span>
+          </div>
+
+          <div className="row">
+            <div className="col mx-auto">
+              <h3>Messages</h3>
+            </div>
+            <div className="col mx-auto">
+              <span>Users: {channelMain.currentChannel.channelPopulation}</span>
+            </div>
           </div>
         </div>
         <MessageContainer>
