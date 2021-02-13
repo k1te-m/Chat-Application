@@ -42,7 +42,7 @@ const WelcomeMessage = styled.h5``;
 const ChannelBoard = () => {
   const auth = useSelector(selectAuth);
   const modal = useSelector(selectModal);
-  const channel = useSelector(selectChannel);
+  const channelMain = useSelector(selectChannel);
   const allChannels = useSelector(selectAllChannels);
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
@@ -85,9 +85,9 @@ const ChannelBoard = () => {
       );
     } else {
       dispatch(createChannel({ name, description, createdBy }));
-      if (typeof channel.newChannel.error === "string") {
+      if (typeof channelMain.newChannel.error === "string") {
         dispatch(
-          SET_ALERT({ message: channel.newChannel.error, type: "danger" })
+          SET_ALERT({ message: channelMain.newChannel.error, type: "danger" })
         );
       } else {
         dispatch(TOGGLE_MODAL());
@@ -110,7 +110,8 @@ const ChannelBoard = () => {
           <h1>{channel.name}</h1>
         </ChannelButton>
         <span>{channel.description}</span>
-        {/* <span>Users: {channel.participants.length}</span> */}
+
+        <span>Users:</span>
       </ChannelCard>
     ));
   }
