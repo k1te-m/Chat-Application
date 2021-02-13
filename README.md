@@ -53,15 +53,10 @@ N/A
 
 ## License
 
-None
-
-## Future Development
-
 MIT License
 
 ## Future Development
 
-    - Automatic scroll to bottom of chat, currently buggy
     - Edit / Delete messages
     - Allow users to choose/upload avatar
     - Emoji Keyboard
