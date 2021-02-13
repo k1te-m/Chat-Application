@@ -1,10 +1,10 @@
-# Chat Application (React-Redux & Socket.io)
+# Chat Application (React-Redux, ReduxToolkit & Socket.io)
 
 ![GitHub](https://img.shields.io/github/license/k1te-m/Chat-Application)![GitHub top language](https://img.shields.io/github/languages/top/k1te-m/Chat-Application)
 
 ## Description
 
-A MERN stack application that allows real time communication between users, utilizing websockets, React-Redux, and MongoDB.
+A MERN stack application that allows real time communication between users, utilizing Socket.io, React-Redux, ReduxToolkit and MongoDB.
 
 ## Table of Contents
 
