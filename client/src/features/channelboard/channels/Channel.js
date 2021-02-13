@@ -3,6 +3,11 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Logo from "../../Logo";
+import API from "../../../utils/API";
+import Loading from "../../loading/Loading";
+import { useHistory } from "react-router-dom";
+
+// State Management Dependencies
 import { selectAuth, loadUser } from "../../auth/authSlice";
 import {
   selectCurrentChannel,
@@ -17,10 +22,7 @@ import {
   loadMessages,
 } from "../../chat/chatSlice";
 import SocketContext from "../../context/socket";
-import { useHistory } from "react-router-dom";
-import API from "../../../utils/API";
 import { SET_ALERT } from "../../alert/alertSlice";
-import Loading from "../../loading/Loading";
 
 // Styled Components
 const ChannelWrapper = styled.div``;
@@ -68,24 +70,28 @@ const ScrollButton = styled.button`
 
 // React Component
 const Channel = (props) => {
+  // Dispatch, Selectors & Socket Context
+  const dispatch = useDispatch();
+
   const auth = useSelector(selectAuth);
   const currentChannel = useSelector(selectCurrentChannel);
-  const dispatch = useDispatch();
-  const socket = useContext(SocketContext);
-  const channelID = props.match.params.channel;
-  const chat = useSelector(selectChatMessages);
-  const history = useHistory();
   const setChannelLoading = useSelector(selectSetChannelLoading);
   const channelMain = useSelector(selectChannel);
+  const chat = useSelector(selectChatMessages);
 
+  const socket = useContext(SocketContext);
+
+  const channelID = props.match.params.channel;
+  const history = useHistory();
   let localChannel = localStorage.getItem("channel");
 
+  // Scroll to Bottom functionality
   const messageEndRef = useRef(null);
-
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // useEffect => if no user, load the user. Else set the current channel equal to the current channelID to retrieve messages from DB
   useEffect(() => {
     if (!auth.user) {
       dispatch(loadUser());
@@ -95,6 +101,7 @@ const Channel = (props) => {
       dispatch(setChannel(localChannel));
       dispatch(loadMessages(channelID));
 
+      // Socket.io emit subscription on channel card click && socket.io listeners
       socket.emit("subscribe", {
         channel: channelID,
         user: auth.user.username,
@@ -133,14 +140,6 @@ const Channel = (props) => {
         dispatch(SET_POPULATION(data));
       });
 
-      // if (channelMain.channelPopulations !== []) {
-      //   const getChannelPopulation = (id, array) => {
-      //     const channelInfo = array.filter((channel) => channel.name === id);
-      //     console.log(channelInfo);
-      //   };
-      //   getChannelPopulation(channelID, channelMain.channelPopulations);
-      // }
-
       const date = new Date();
       setTimeout(() => {
         socket.emit("USER_CONNECTED", {
@@ -152,6 +151,7 @@ const Channel = (props) => {
     }
   }, [dispatch, localChannel, auth.user, channelID, socket]);
 
+  // Local state message object for sending message & handleInputChange/handleSubmit
   const [messageObject, setMessageObject] = useState({
     message: "",
     username: "",
@@ -188,6 +188,7 @@ const Channel = (props) => {
     }
   };
 
+  // Allows for enter to submit form textarea
   const enterSubmit = (event) => {
     if (event.key === "Enter" && event.shiftKey === false) {
       return handleSubmit(event);
