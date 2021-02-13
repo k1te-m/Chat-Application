@@ -224,7 +224,7 @@ const Channel = (props) => {
               <UsernameHeader>
                 {message.username}{" "}
                 <TimeStampHeader>
-                  ({formatDate(message.timeStamp)}):
+                  {formatDate(message.timeStamp)}:
                 </TimeStampHeader>{" "}
               </UsernameHeader>
             </div>
