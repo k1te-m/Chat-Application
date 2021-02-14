@@ -4,7 +4,7 @@
 
 ## Description
 
-A MERN stack application that allows real time communication between users, utilizing Socket.io, React-Redux, ReduxToolkit and MongoDB.
+A MERN stack application that allows real time communication between users, utilizing Socket.io, React-Redux, and ReduxToolkit.
 
 ## Table of Contents
 
